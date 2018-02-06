@@ -1,4 +1,4 @@
-# Install script for directory: /home/giang-rocker/AniAge/eos
+# Install script for directory: /home/giang-rocker/AniAge/eosDetail
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
@@ -38,52 +38,52 @@ if(NOT DEFINED CMAKE_CROSSCOMPILING)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/giang-rocker/AniAge/eos/include/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/include" TYPE DIRECTORY FILES "/home/giang-rocker/AniAge/eosDetail/include/")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share" TYPE DIRECTORY FILES "/home/giang-rocker/AniAge/eos/share/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/share" TYPE DIRECTORY FILES "/home/giang-rocker/AniAge/eosDetail/share/")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/3rdparty/cereal" TYPE DIRECTORY FILES "/home/giang-rocker/AniAge/eos/3rdparty/cereal/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/3rdparty/cereal" TYPE DIRECTORY FILES "/home/giang-rocker/AniAge/eosDetail/3rdparty/cereal/")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/3rdparty/glm/glm" TYPE DIRECTORY FILES "/home/giang-rocker/AniAge/eos/3rdparty/glm/glm/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/3rdparty/glm/glm" TYPE DIRECTORY FILES "/home/giang-rocker/AniAge/eosDetail/3rdparty/glm/glm/")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/3rdparty/glm" TYPE FILE FILES "/home/giang-rocker/AniAge/eos/3rdparty/glm/copying.txt")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/3rdparty/glm" TYPE FILE FILES "/home/giang-rocker/AniAge/eosDetail/3rdparty/glm/copying.txt")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/3rdparty/nanoflann/include" TYPE DIRECTORY FILES "/home/giang-rocker/AniAge/eos/3rdparty/nanoflann/include/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/3rdparty/nanoflann/include" TYPE DIRECTORY FILES "/home/giang-rocker/AniAge/eosDetail/3rdparty/nanoflann/include/")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/3rdparty/nanoflann" TYPE FILE FILES "/home/giang-rocker/AniAge/eos/3rdparty/nanoflann/COPYING")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/3rdparty/nanoflann" TYPE FILE FILES "/home/giang-rocker/AniAge/eosDetail/3rdparty/nanoflann/COPYING")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/3rdparty/eigen3-nnls/src" TYPE DIRECTORY FILES "/home/giang-rocker/AniAge/eos/3rdparty/eigen3-nnls/src/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/3rdparty/eigen3-nnls/src" TYPE DIRECTORY FILES "/home/giang-rocker/AniAge/eosDetail/3rdparty/eigen3-nnls/src/")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/3rdparty/eigen3-nnls" TYPE FILE FILES "/home/giang-rocker/AniAge/eos/3rdparty/eigen3-nnls/README.md")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/3rdparty/eigen3-nnls" TYPE FILE FILES "/home/giang-rocker/AniAge/eosDetail/3rdparty/eigen3-nnls/README.md")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/3rdparty/toml11" TYPE DIRECTORY FILES "/home/giang-rocker/AniAge/eos/3rdparty/toml11/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/3rdparty/toml11" TYPE DIRECTORY FILES "/home/giang-rocker/AniAge/eosDetail/3rdparty/toml11/")
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/3rdparty/eigen/Eigen" TYPE DIRECTORY FILES "/home/giang-rocker/AniAge/eos/3rdparty/eigen/Eigen/")
+  file(INSTALL DESTINATION "${CMAKE_INSTALL_PREFIX}/3rdparty/eigen/Eigen" TYPE DIRECTORY FILES "/home/giang-rocker/AniAge/eosDetail/3rdparty/eigen/Eigen/")
 endif()
 
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
-  include("/home/giang-rocker/AniAge/eos/build/examples/cmake_install.cmake")
+  include("/home/giang-rocker/AniAge/eosDetail/build/examples/cmake_install.cmake")
 
 endif()
 
@@ -95,5 +95,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/giang-rocker/AniAge/eos/build/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/giang-rocker/AniAge/eosDetail/build/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

@@ -269,8 +269,10 @@ void project2Dto3D(cv::Mat image,  cv::Mat cameraMatrix, vector<VectorXf>& _2Dim
         vec3f[2] =   1.0f;
     
         cv::Mat temp  =   cameraMatrix.inv() * cv::Mat(vec3f);
-        VectorXf temp2V(5); temp2V(2) = temp.at<float>(0,0);temp2V(3) = temp.at<float>(1,0);temp2V(4) = temp.at<float>(2,0);
-                temp2V(0)  = i*1.0f;temp2V(1) = j*1.0f;
+        VectorXf temp2V(5); 
+        temp2V(0)  = i*1.0f;    temp2V(1) = j*1.0f;
+        temp2V(2) = temp.at<float>(0,0);    temp2V(3) = temp.at<float>(1,0);    temp2V(4) = temp.at<float>(2,0);
+                
             
     //     cout << temp2V.transpose() << endl;
         _2DimageZ.push_back(temp2V);
@@ -279,6 +281,65 @@ void project2Dto3D(cv::Mat image,  cv::Mat cameraMatrix, vector<VectorXf>& _2Dim
 }
 
 void get2DimageZ(Mesh mesh,vector <VectorXf>  _2DimageZ, vector<vector <int > > mappingTriangle, vector <Vector3f>&  _2DimageRealZ ) {
+
+    Vector3f X,Y,A,B,C, BA ,CA;
+    //freopen ("CheckCross.txt","w",stdout);
+    for (int i =0; i < _2DimageZ.size (); i++) {
+        float u = _2DimageZ.at(i)(0);
+        float v = _2DimageZ.at(i)(1);
+        // z(u, v) = 1
+        float x = _2DimageZ.at(i)(2);
+        float y = _2DimageZ.at(i)(3);
+        float z = _2DimageZ.at(i)(4);
+        int idTriangle = mappingTriangle.at((int)u).at((int)v);
+
+        if (idTriangle==-1) continue;
+     //   cout <<u <<" " << v <<" " << 1.0f << " " << x << " " << y << " "<< z  << " "  << idTriangle << endl;
+
+        // line XY
+        X << u,v,1.0f; Y << x,y,z;
+        Vector3f n ;n << (x - u)  , (y -v) , (z-1)  ; 
+        float al = n(0), bl = n(1), cl = n(2);
+    
+        // Plan P (ABC)        
+        A << mesh.vertices[mesh.tvi[idTriangle][0]][0] , mesh.vertices[mesh.tvi[idTriangle][0]][1] ,mesh.vertices[mesh.tvi[idTriangle][0]][2] ;
+        B << mesh.vertices[mesh.tvi[idTriangle][1]][0] , mesh.vertices[mesh.tvi[idTriangle][1]][1] ,mesh.vertices[mesh.tvi[idTriangle][1]][2] ;
+        C << mesh.vertices[mesh.tvi[idTriangle][2]][0] , mesh.vertices[mesh.tvi[idTriangle][2]][1] ,mesh.vertices[mesh.tvi[idTriangle][2]][2] ;
+
+     //   cout << A.transpose() << " " << B.transpose () << " " << C.transpose () << endl;
+
+        BA(0) =  (B(0)-A(0)); BA(1) = (B(1)-A(1)); BA(2) = (B(2)-A(2)); 
+        CA(0) =  (C(0)-A(0)); CA(1) = (C(1)-A(1)); CA(2) = (C(2)-A(2)); 
+
+        Vector3f p ; 
+        p(0) = BA(1)*CA(2) - CA(1)*BA(2);
+        p(1) = BA(2)*CA(0) - CA(2)*BA(0);
+        p(2) = BA(0)*CA(1) - CA(0)*BA(1);
+
+        float a= p(0), b = p(1), c = p(2); 
+
+        float d= - ( a* A(0) + b*A(1) + c* A(2) );
+
+        float t  = -( a*x+ b*y + c*z + d  )  / ( a*al + b*bl + c*cl );
+
+        float crossX  = x + al*t;
+        float crossY  = y + bl*t;
+        float crossZ  = z + cl*t;
+        Vector3f crossPoint ; 
+        crossPoint << crossX,crossY,crossZ;
+
+      //  cout << a << " " << b << " " <<  c << " " << d << endl;
+       // cout << crossPoint.transpose() << endl ;
+        //cout <<  ( a*crossPoint(0) + b*crossPoint(1) + c*crossPoint(2) + d ) << endl << endl;
+
+        _2DimageRealZ.push_back(crossPoint);
+
+    }
+
+
+}
+
+void get2DimageRealZ(Mesh mesh,vector <VectorXf>  _2DimageZ, vector<vector <int > > mappingTriangle, vector <Vector3f>&  _2DimageRealZ ) {
 
     Vector3f X,Y,A,B,C, BA ,CA;
     freopen ("CheckCross.txt","w",stdout);
@@ -327,8 +388,8 @@ void get2DimageZ(Mesh mesh,vector <VectorXf>  _2DimageZ, vector<vector <int > > 
         crossPoint << crossX,crossY,crossZ;
 
         cout << a << " " << b << " " <<  c << " " << d << endl;
-        cout << crossPoint.transpose() << endl << endl;
-      //  cout <<  ( a*crossX + b*crossY + c*crossZ + d ) << endl << endl;
+        cout << crossPoint.transpose() << endl ;
+        cout <<  ( a*crossPoint(0) + b*crossPoint(1) + c*crossPoint(2) + d ) << endl << endl;
 
         _2DimageRealZ.push_back(crossPoint);
 
@@ -440,6 +501,7 @@ int numOfPoint = mesh.vertices.size ();
 
    
 }
+ 
 
 int main(int argc, char* argv[])
 {
@@ -559,6 +621,9 @@ int main(int argc, char* argv[])
 
     const int imgw = image.cols;
     const int imgh = image.rows;
+    uint8_t r,g,b;  
+    Mat imageOriginal = cv::imread(imagefile); 
+
     cout <<"image size: " << image.cols << " x " << image.rows <<endl; 
 
     vector <vector <int> > mappingTriangle;
@@ -583,20 +648,36 @@ int main(int argc, char* argv[])
     project2Dto3D(image,  cameraMatrix,  _2DimageZ );
     vector<Vector3f> _2DimageRealZ ;
     get2DimageZ(mesh,_2DimageZ,mappingTriangle,_2DimageRealZ );
-        
 
+   Vector3f A,B,C,D;
+   A << _2DimageZ.at(0)(0),_2DimageZ.at(0)(1), (1.0f);
+   C << _2DimageZ.at(0)(2),_2DimageZ.at(0)(3),_2DimageZ.at(0)(4);
+   B << _2DimageZ.at(imgw-1)(0),_2DimageZ.at(imgw-1)(1), (1.0f);
+   D << _2DimageZ.at(imgw-1)(2),_2DimageZ.at(imgw-1)(3),_2DimageZ.at(imgw-1)(4);
+
+
+   float scale = 2*getLen(A,B) / getLen(C,D);
+   cout << "scale: " << scale << endl;
     
-    freopen ("2DImageZ.off","w",stdout);
+    /*
+    freopen ("_2DimageRealZ.off","w",stdout);
     cout << "COFF\n";
-    cout << (_2DimageZ.size ()*2) << " 0 0" << endl;
-    for (int i =0; i < _2DimageZ.size (); i ++ ){
-       cout << _2DimageZ.at(i)(0) << " "  << _2DimageZ.at(i)(1) << " "  << 1 << endl;
-    } //1st for
+    cout << (_2DimageZ.size () + mesh.vertices.size () ) << " 0 0" << endl;
     
-   for (int i =0; i < _2DimageZ.size (); i ++ ){
-       cout << _2DimageZ.at(i)(2) << " "  << _2DimageZ.at(i)(3) << " "  << _2DimageZ.at(i)(4)  << endl;
+    for (int i =0; i < _2DimageZ.size (); i ++ ){
+        int u = _2DimageZ.at(i)(0);
+        int v = _2DimageZ.at(i)(1);
+        b=imageOriginal.at<cv::Vec3b>(v,u)[0];//R
+        g=imageOriginal.at<cv::Vec3b>(v,u)[1];//B
+        r=imageOriginal.at<cv::Vec3b>(v,u)[2];//G
+   //     cout << _2DimageZ.at(i)(0) << " "  << _2DimageZ.at(i)(1) << " "  << " 1 " << (int)r << " " << (int)g   << " " << (int) b << " 1"<< endl;
+       cout << _2DimageZ.at(i)(2) << " "  << _2DimageZ.at(i)(3) << " "  << _2DimageZ.at(i)(4)  <<" "<< (int)r << " " << (int)g   << " " << (int) b << " 1"<< endl;
     } 
- 
+
+    for (int i=0 ; i < mesh.vertices.size () ; i ++)
+        cout << mesh.vertices.at (i)( 0) << " "<< mesh.vertices.at (i)( 1) << " "<< 27 << " " << " 200 200 200 1" << endl;
+    */
+
     vector <vector <float> > depthMap;
    
      for (int i =0; i < imgw; i++){
@@ -609,25 +690,15 @@ int main(int argc, char* argv[])
     }
 
     int count = 0;
-    float bounder [6]; // maxX minX maxY minY maxZ minZ;
-
-    bounder[0] = -19999.0f;
-    bounder[1] = 9999.0f;
-    bounder[2] = -19999.0f;
-    bounder[3] =-19999.0f;
-    bounder[4] = -19999.0f;
-    bounder[5] = 9999.0f;
+    
 
     render::add_depth_information(outimg, mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
-                           fitting::get_opencv_viewport(image.cols, image.rows),depthMap,bounder);
-      uint8_t r,g,b;
-     
-  
-    Mat imageOriginal = cv::imread(imagefile); 
+                           fitting::get_opencv_viewport(image.cols, image.rows),depthMap, scale);
+    
    
     freopen ("depthmap.off","w",stdout);
     cout << "COFF\n";
-     cout << (imgw*imgh) << " 0 0" << endl;
+     cout << (_2DimageRealZ.size ()) << " 0 0" << endl;
     for (int i =0; i < imgw; i++) {
         for (int  j =0 ; j < imgh; j++){
         b=imageOriginal.at<cv::Vec3b>(j,i)[0];//R
@@ -635,9 +706,9 @@ int main(int argc, char* argv[])
         r=imageOriginal.at<cv::Vec3b>(j,i)[2];//G
 
 
-        if ( depthMap[i][j]!=-9999 &&  depthMap[i][j] <= bounder[4] &&   depthMap[i][j] >= bounder[5] )
+        if ( depthMap[i][j]!=-9999  )
         {         
-                cout << (i) <<" " << (imgh-j) << " " << (-depthMap[i][j]) <<  " "  << (int) r << " "  << (int) g << " " << (int) b << " 1"   <<endl ;
+                cout << (i) <<" " << (j) << " " << (depthMap[i][j]) <<  " "  << (int) r << " "  << (int) g << " " << (int) b << " 1"   <<endl ;
                 count ++;
         }
         } // 2nd for    
@@ -645,7 +716,7 @@ int main(int argc, char* argv[])
 
     cout << count << endl;
     
-     /*
+    /*
     int image_height = image.rows;
     int image_width = image.cols;
 
@@ -727,7 +798,7 @@ int main(int argc, char* argv[])
   
 
     // END OF GET INTENSITY
-
+ */
 
     fs::path outputfile = outputbasename + ".png";
     cv::imwrite(outputfile.string(), outimg);
@@ -739,7 +810,7 @@ int main(int argc, char* argv[])
     // And save the isomap:
     outputfile.replace_extension(".isomap.png");
     cv::imwrite(outputfile.string(), core::to_mat(isomap));
-    */
+   
 
  //   cout << "Finished fitting and wrote result mesh and isomap to files with basename "
   //       << outputfile.stem().stem() << "." << endl;

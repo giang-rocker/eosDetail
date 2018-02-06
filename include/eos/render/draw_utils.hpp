@@ -114,12 +114,12 @@ inline void mapping(cv::Mat image, const core::Mesh& mesh, glm::mat4x4 modelview
 inline void add_depth_information(cv::Mat image, const core::Mesh mesh, glm::mat4x4 modelview,
                            glm::mat4x4 projection, glm::vec4 viewport,
                            vector <vector <float > >& depthMap, 
-                           float bounder[6],
+                             float _scale, 
                            cv::Scalar color = cv::Scalar(0, 255, 0, 255))
 {
 
 
-    float scale = 10.0f;
+    float scale = _scale;
  
     for (const auto& triangle : mesh.tvi)
     {
@@ -148,30 +148,6 @@ inline void add_depth_information(cv::Mat image, const core::Mesh mesh, glm::mat
             depthMap[(int)p3.x][(int)p3.y] =  p3z ;
             
               
-            if (p1.x > bounder[0]) bounder[0] = p1.x;
-            if (p2.x > bounder[0]) bounder[0] = p2.x;
-            if (p3.x > bounder[0]) bounder[0] = p3.x;
-
-            if (p1.x < bounder[1]) bounder[1] = p1.x;
-            if (p2.x < bounder[1]) bounder[1] = p2.x;
-            if (p3.x < bounder[1]) bounder[1] = p3.x;
-
-            if (p1.y > bounder[2]) bounder[2] = p1.y;
-            if (p2.y > bounder[2]) bounder[2] = p2.y;
-            if (p3.y > bounder[2]) bounder[2] = p3.y;
-
-            if (p1.y < bounder[3]) bounder[3] = p1.y;
-            if (p2.y < bounder[3]) bounder[3] = p2.y;
-            if (p3.y < bounder[3]) bounder[3] = p3.y;
-
-            if (p1z > bounder[4]) bounder[4] = p1z;
-            if (p2z > bounder[4]) bounder[4] = p2z;
-            if (p3z > bounder[4]) bounder[4] = p3z;
-
-            if (p1z < bounder[5]) bounder[5] = p1z;
-            if (p2z < bounder[5]) bounder[5] = p2z;
-            if (p3z < bounder[5]) bounder[5] = p3z;
-
             float A[3]  ; A[0]  =  (p2.x-p1.x); A[1]  = (p2.y-p1.y); A[2]  = (p2z-p1z); 
             float B[3]  ; B[0]  =  (p3.x-p1.x); B[1]  = (p3.y-p1.y); B[2]  = (p3z-p1z); 
             float p[3] ;
@@ -215,10 +191,10 @@ inline double getLen (Vector2f a, Vector2f b) {
 inline void getMapping2D3D(cv::Mat image, const core::Mesh& mesh, glm::mat4x4 modelview,
                            glm::mat4x4 projection, glm::vec4 viewport,
                            vector <vector< int > >&  mapping,
-                           vector <vector< double > >&  currentLen,
+                           vector <vector< double > >&  currentLen, float _scale,
                            cv::Scalar color = cv::Scalar(0, 255, 0, 255))
 {
-    float scale = 10.0f;
+    float scale = _scale;
 
     for (const auto& triangle : mesh.tvi)
     {
@@ -384,7 +360,7 @@ inline void getMapping2DTriangle(cv::Mat image, const core::Mesh& mesh, glm::mat
         }
         currentTriangle++;
     }
-    cout << "DONE MAPPINGs" << endl;
+    cout << "DONE MAPPINGs Triangle" << endl;
 };
 
 

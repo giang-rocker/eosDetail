@@ -1,0 +1,5 @@
+cd ..
+make 
+cd examples
+echo "DONE make"
+./fit-model -i data/070.jpg -l data/070.pts

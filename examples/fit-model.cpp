@@ -514,15 +514,18 @@ for (int i =0; i < mesh.vertices.size (); i++) {
         int i2 = triangle[1];
         int i3 = triangle[2];
 
+        check[i1][i2] = true;
+        check[i2][i3] = true; 
+        check[i3][i1] = true; 
         check[i2][i1] = true;
-        check[i3][i2] = true; 
-        check[i1][i3] = true; 
+        check[i3][i2] = true;
+        check[i1][i3] = true;
     }
 
     for (int i =0; i < mesh.vertices.size (); i++)
         for (int j =0; j < mesh.vertices.size (); j++)
          if ( check[i][j]  ) 
-            edge.at(j).push_back(i);
+            edge.at(i).push_back(j);
 
 }
 

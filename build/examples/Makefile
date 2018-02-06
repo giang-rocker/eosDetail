@@ -48,10 +48,10 @@ RM = /usr/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/giang-rocker/AniAge/eos
+CMAKE_SOURCE_DIR = /home/giang-rocker/AniAge/eosDetail
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/giang-rocker/AniAge/eos/build
+CMAKE_BINARY_DIR = /home/giang-rocker/AniAge/eosDetail/build
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -127,7 +127,7 @@ install/strip/fast: preinstall/fast
 # Special rule for the target package
 package: preinstall
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool..."
-	cd /home/giang-rocker/AniAge/eos/build && /usr/local/bin/cpack --config ./CPackConfig.cmake
+	cd /home/giang-rocker/AniAge/eosDetail/build && /usr/local/bin/cpack --config ./CPackConfig.cmake
 .PHONY : package
 
 # Special rule for the target package
@@ -138,7 +138,7 @@ package/fast: package
 # Special rule for the target package_source
 package_source:
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --cyan "Run CPack packaging tool for source..."
-	cd /home/giang-rocker/AniAge/eos/build && /usr/local/bin/cpack --config ./CPackSourceConfig.cmake /home/giang-rocker/AniAge/eos/build/CPackSourceConfig.cmake
+	cd /home/giang-rocker/AniAge/eosDetail/build && /usr/local/bin/cpack --config ./CPackSourceConfig.cmake /home/giang-rocker/AniAge/eosDetail/build/CPackSourceConfig.cmake
 .PHONY : package_source
 
 # Special rule for the target package_source
@@ -148,14 +148,14 @@ package_source/fast: package_source
 
 # The main all target
 all: cmake_check_build_system
-	cd /home/giang-rocker/AniAge/eos/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eos/build/CMakeFiles /home/giang-rocker/AniAge/eos/build/examples/CMakeFiles/progress.marks
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f CMakeFiles/Makefile2 examples/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eos/build/CMakeFiles 0
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eosDetail/build/CMakeFiles /home/giang-rocker/AniAge/eosDetail/build/examples/CMakeFiles/progress.marks
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f CMakeFiles/Makefile2 examples/all
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eosDetail/build/CMakeFiles 0
 .PHONY : all
 
 # The main clean target
 clean:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f CMakeFiles/Makefile2 examples/clean
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f CMakeFiles/Makefile2 examples/clean
 .PHONY : clean
 
 # The main clean target
@@ -165,22 +165,22 @@ clean/fast: clean
 
 # Prepare targets for installation.
 preinstall: all
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f CMakeFiles/Makefile2 examples/preinstall
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f CMakeFiles/Makefile2 examples/preinstall
 .PHONY : preinstall
 
 # Prepare targets for installation.
 preinstall/fast:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f CMakeFiles/Makefile2 examples/preinstall
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f CMakeFiles/Makefile2 examples/preinstall
 .PHONY : preinstall/fast
 
 # clear depends
 depend:
-	cd /home/giang-rocker/AniAge/eos/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 1
 .PHONY : depend
 
 # Convenience name for target.
 examples/CMakeFiles/fit-model.dir/rule:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/fit-model.dir/rule
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/fit-model.dir/rule
 .PHONY : examples/CMakeFiles/fit-model.dir/rule
 
 # Convenience name for target.
@@ -190,12 +190,12 @@ fit-model: examples/CMakeFiles/fit-model.dir/rule
 
 # fast build rule for target.
 fit-model/fast:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f examples/CMakeFiles/fit-model.dir/build.make examples/CMakeFiles/fit-model.dir/build
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f examples/CMakeFiles/fit-model.dir/build.make examples/CMakeFiles/fit-model.dir/build
 .PHONY : fit-model/fast
 
 # Convenience name for target.
 examples/CMakeFiles/fit-model-multi.dir/rule:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/fit-model-multi.dir/rule
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/fit-model-multi.dir/rule
 .PHONY : examples/CMakeFiles/fit-model-multi.dir/rule
 
 # Convenience name for target.
@@ -205,12 +205,12 @@ fit-model-multi: examples/CMakeFiles/fit-model-multi.dir/rule
 
 # fast build rule for target.
 fit-model-multi/fast:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f examples/CMakeFiles/fit-model-multi.dir/build.make examples/CMakeFiles/fit-model-multi.dir/build
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f examples/CMakeFiles/fit-model-multi.dir/build.make examples/CMakeFiles/fit-model-multi.dir/build
 .PHONY : fit-model-multi/fast
 
 # Convenience name for target.
 examples/CMakeFiles/generate-obj.dir/rule:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/generate-obj.dir/rule
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/generate-obj.dir/rule
 .PHONY : examples/CMakeFiles/generate-obj.dir/rule
 
 # Convenience name for target.
@@ -220,12 +220,12 @@ generate-obj: examples/CMakeFiles/generate-obj.dir/rule
 
 # fast build rule for target.
 generate-obj/fast:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f examples/CMakeFiles/generate-obj.dir/build.make examples/CMakeFiles/generate-obj.dir/build
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f examples/CMakeFiles/generate-obj.dir/build.make examples/CMakeFiles/generate-obj.dir/build
 .PHONY : generate-obj/fast
 
 # Convenience name for target.
 examples/CMakeFiles/fit-model-simple.dir/rule:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/fit-model-simple.dir/rule
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/fit-model-simple.dir/rule
 .PHONY : examples/CMakeFiles/fit-model-simple.dir/rule
 
 # Convenience name for target.
@@ -235,7 +235,7 @@ fit-model-simple: examples/CMakeFiles/fit-model-simple.dir/rule
 
 # fast build rule for target.
 fit-model-simple/fast:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f examples/CMakeFiles/fit-model-simple.dir/build.make examples/CMakeFiles/fit-model-simple.dir/build
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f examples/CMakeFiles/fit-model-simple.dir/build.make examples/CMakeFiles/fit-model-simple.dir/build
 .PHONY : fit-model-simple/fast
 
 fit-model-multi.o: fit-model-multi.cpp.o
@@ -244,7 +244,7 @@ fit-model-multi.o: fit-model-multi.cpp.o
 
 # target to build an object file
 fit-model-multi.cpp.o:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f examples/CMakeFiles/fit-model-multi.dir/build.make examples/CMakeFiles/fit-model-multi.dir/fit-model-multi.cpp.o
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f examples/CMakeFiles/fit-model-multi.dir/build.make examples/CMakeFiles/fit-model-multi.dir/fit-model-multi.cpp.o
 .PHONY : fit-model-multi.cpp.o
 
 fit-model-multi.i: fit-model-multi.cpp.i
@@ -253,7 +253,7 @@ fit-model-multi.i: fit-model-multi.cpp.i
 
 # target to preprocess a source file
 fit-model-multi.cpp.i:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f examples/CMakeFiles/fit-model-multi.dir/build.make examples/CMakeFiles/fit-model-multi.dir/fit-model-multi.cpp.i
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f examples/CMakeFiles/fit-model-multi.dir/build.make examples/CMakeFiles/fit-model-multi.dir/fit-model-multi.cpp.i
 .PHONY : fit-model-multi.cpp.i
 
 fit-model-multi.s: fit-model-multi.cpp.s
@@ -262,7 +262,7 @@ fit-model-multi.s: fit-model-multi.cpp.s
 
 # target to generate assembly for a file
 fit-model-multi.cpp.s:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f examples/CMakeFiles/fit-model-multi.dir/build.make examples/CMakeFiles/fit-model-multi.dir/fit-model-multi.cpp.s
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f examples/CMakeFiles/fit-model-multi.dir/build.make examples/CMakeFiles/fit-model-multi.dir/fit-model-multi.cpp.s
 .PHONY : fit-model-multi.cpp.s
 
 fit-model-simple.o: fit-model-simple.cpp.o
@@ -271,7 +271,7 @@ fit-model-simple.o: fit-model-simple.cpp.o
 
 # target to build an object file
 fit-model-simple.cpp.o:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f examples/CMakeFiles/fit-model-simple.dir/build.make examples/CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.o
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f examples/CMakeFiles/fit-model-simple.dir/build.make examples/CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.o
 .PHONY : fit-model-simple.cpp.o
 
 fit-model-simple.i: fit-model-simple.cpp.i
@@ -280,7 +280,7 @@ fit-model-simple.i: fit-model-simple.cpp.i
 
 # target to preprocess a source file
 fit-model-simple.cpp.i:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f examples/CMakeFiles/fit-model-simple.dir/build.make examples/CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.i
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f examples/CMakeFiles/fit-model-simple.dir/build.make examples/CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.i
 .PHONY : fit-model-simple.cpp.i
 
 fit-model-simple.s: fit-model-simple.cpp.s
@@ -289,7 +289,7 @@ fit-model-simple.s: fit-model-simple.cpp.s
 
 # target to generate assembly for a file
 fit-model-simple.cpp.s:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f examples/CMakeFiles/fit-model-simple.dir/build.make examples/CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.s
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f examples/CMakeFiles/fit-model-simple.dir/build.make examples/CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.s
 .PHONY : fit-model-simple.cpp.s
 
 fit-model.o: fit-model.cpp.o
@@ -298,7 +298,7 @@ fit-model.o: fit-model.cpp.o
 
 # target to build an object file
 fit-model.cpp.o:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f examples/CMakeFiles/fit-model.dir/build.make examples/CMakeFiles/fit-model.dir/fit-model.cpp.o
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f examples/CMakeFiles/fit-model.dir/build.make examples/CMakeFiles/fit-model.dir/fit-model.cpp.o
 .PHONY : fit-model.cpp.o
 
 fit-model.i: fit-model.cpp.i
@@ -307,7 +307,7 @@ fit-model.i: fit-model.cpp.i
 
 # target to preprocess a source file
 fit-model.cpp.i:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f examples/CMakeFiles/fit-model.dir/build.make examples/CMakeFiles/fit-model.dir/fit-model.cpp.i
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f examples/CMakeFiles/fit-model.dir/build.make examples/CMakeFiles/fit-model.dir/fit-model.cpp.i
 .PHONY : fit-model.cpp.i
 
 fit-model.s: fit-model.cpp.s
@@ -316,7 +316,7 @@ fit-model.s: fit-model.cpp.s
 
 # target to generate assembly for a file
 fit-model.cpp.s:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f examples/CMakeFiles/fit-model.dir/build.make examples/CMakeFiles/fit-model.dir/fit-model.cpp.s
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f examples/CMakeFiles/fit-model.dir/build.make examples/CMakeFiles/fit-model.dir/fit-model.cpp.s
 .PHONY : fit-model.cpp.s
 
 generate-obj.o: generate-obj.cpp.o
@@ -325,7 +325,7 @@ generate-obj.o: generate-obj.cpp.o
 
 # target to build an object file
 generate-obj.cpp.o:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f examples/CMakeFiles/generate-obj.dir/build.make examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f examples/CMakeFiles/generate-obj.dir/build.make examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o
 .PHONY : generate-obj.cpp.o
 
 generate-obj.i: generate-obj.cpp.i
@@ -334,7 +334,7 @@ generate-obj.i: generate-obj.cpp.i
 
 # target to preprocess a source file
 generate-obj.cpp.i:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f examples/CMakeFiles/generate-obj.dir/build.make examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.i
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f examples/CMakeFiles/generate-obj.dir/build.make examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.i
 .PHONY : generate-obj.cpp.i
 
 generate-obj.s: generate-obj.cpp.s
@@ -343,7 +343,7 @@ generate-obj.s: generate-obj.cpp.s
 
 # target to generate assembly for a file
 generate-obj.cpp.s:
-	cd /home/giang-rocker/AniAge/eos/build && $(MAKE) -f examples/CMakeFiles/generate-obj.dir/build.make examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.s
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(MAKE) -f examples/CMakeFiles/generate-obj.dir/build.make examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.s
 .PHONY : generate-obj.cpp.s
 
 # Help Target
@@ -387,6 +387,6 @@ help:
 # No rule that depends on this can have commands that come from listfiles
 # because they might be regenerated.
 cmake_check_build_system:
-	cd /home/giang-rocker/AniAge/eos/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(CMAKE_COMMAND) -H$(CMAKE_SOURCE_DIR) -B$(CMAKE_BINARY_DIR) --check-build-system CMakeFiles/Makefile.cmake 0
 .PHONY : cmake_check_build_system
 

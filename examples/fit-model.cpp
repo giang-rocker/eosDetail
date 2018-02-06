@@ -281,7 +281,7 @@ void project2Dto3D(cv::Mat image,  cv::Mat cameraMatrix, vector<VectorXf>& _2Dim
 void get2DimageZ(Mesh mesh,vector <VectorXf>  _2DimageZ, vector<vector <int > > mappingTriangle, vector <Vector3f>&  _2DimageRealZ ) {
 
     Vector3f X,Y,A,B,C, BA ,CA;
-//    freopen ("CheckCross.txt","w",stdout);
+    freopen ("CheckCross.txt","w",stdout);
     for (int i =0; i < _2DimageZ.size (); i++) {
         float u = _2DimageZ.at(i)(0);
         float v = _2DimageZ.at(i)(1);
@@ -326,8 +326,8 @@ void get2DimageZ(Mesh mesh,vector <VectorXf>  _2DimageZ, vector<vector <int > > 
         Vector3f crossPoint ; 
         crossPoint << crossX,crossY,crossZ;
 
-     //   cout << crossPoint.transpose () << endl;
-
+        cout << a << " " << b << " " <<  c << " " << d << endl;
+        cout << crossPoint.transpose() << endl << endl;
       //  cout <<  ( a*crossX + b*crossY + c*crossZ + d ) << endl << endl;
 
         _2DimageRealZ.push_back(crossPoint);

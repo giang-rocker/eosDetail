@@ -276,8 +276,6 @@ examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o: /home/giang-rocker/anac
 examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o: /home/giang-rocker/anaconda3/include/opencv2/core/cuda.hpp
 examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o: /home/giang-rocker/anaconda3/include/opencv2/core/cuda.inl.hpp
 examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o: /home/giang-rocker/anaconda3/include/opencv2/core/cuda_types.hpp
-examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o: /home/giang-rocker/anaconda3/include/opencv2/core/cv_cpu_dispatch.h
-examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o: /home/giang-rocker/anaconda3/include/opencv2/core/cv_cpu_helper.h
 examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o: /home/giang-rocker/anaconda3/include/opencv2/core/cvdef.h
 examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o: /home/giang-rocker/anaconda3/include/opencv2/core/cvstd.hpp
 examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o: /home/giang-rocker/anaconda3/include/opencv2/core/cvstd.inl.hpp
@@ -298,7 +296,6 @@ examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o: /home/giang-rocker/anac
 examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o: /home/giang-rocker/anaconda3/include/opencv2/core/types_c.h
 examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o: /home/giang-rocker/anaconda3/include/opencv2/core/utility.hpp
 examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o: /home/giang-rocker/anaconda3/include/opencv2/core/version.hpp
-examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o: /home/giang-rocker/anaconda3/include/opencv2/core/vsx_utils.hpp
 examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o: /home/giang-rocker/anaconda3/include/opencv2/features2d.hpp
 examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o: /home/giang-rocker/anaconda3/include/opencv2/flann.hpp
 examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o: /home/giang-rocker/anaconda3/include/opencv2/flann/all_indices.h

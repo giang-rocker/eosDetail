@@ -4,7 +4,7 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/giang-rocker/AniAge/eos/examples/generate-obj.cpp" "/home/giang-rocker/AniAge/eos/build/examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o"
+  "/home/giang-rocker/AniAge/eosDetail/examples/generate-obj.cpp" "/home/giang-rocker/AniAge/eosDetail/build/examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

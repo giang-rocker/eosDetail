@@ -43,10 +43,10 @@ RM = /usr/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/giang-rocker/AniAge/eos
+CMAKE_SOURCE_DIR = /home/giang-rocker/AniAge/eosDetail
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/giang-rocker/AniAge/eos/build
+CMAKE_BINARY_DIR = /home/giang-rocker/AniAge/eosDetail/build
 
 # Include any dependencies generated for this target.
 include examples/CMakeFiles/fit-model-simple.dir/depend.make
@@ -59,16 +59,16 @@ include examples/CMakeFiles/fit-model-simple.dir/flags.make
 
 examples/CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.o: examples/CMakeFiles/fit-model-simple.dir/flags.make
 examples/CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.o: ../examples/fit-model-simple.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/giang-rocker/AniAge/eos/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object examples/CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.o"
-	cd /home/giang-rocker/AniAge/eos/build/examples && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.o -c /home/giang-rocker/AniAge/eos/examples/fit-model-simple.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/giang-rocker/AniAge/eosDetail/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object examples/CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.o"
+	cd /home/giang-rocker/AniAge/eosDetail/build/examples && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.o -c /home/giang-rocker/AniAge/eosDetail/examples/fit-model-simple.cpp
 
 examples/CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.i"
-	cd /home/giang-rocker/AniAge/eos/build/examples && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/giang-rocker/AniAge/eos/examples/fit-model-simple.cpp > CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.i
+	cd /home/giang-rocker/AniAge/eosDetail/build/examples && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/giang-rocker/AniAge/eosDetail/examples/fit-model-simple.cpp > CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.i
 
 examples/CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.s"
-	cd /home/giang-rocker/AniAge/eos/build/examples && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/giang-rocker/AniAge/eos/examples/fit-model-simple.cpp -o CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.s
+	cd /home/giang-rocker/AniAge/eosDetail/build/examples && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/giang-rocker/AniAge/eosDetail/examples/fit-model-simple.cpp -o CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.s
 
 examples/CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.o.requires:
 
@@ -90,15 +90,15 @@ fit__model__simple_EXTERNAL_OBJECTS =
 
 examples/fit-model-simple: examples/CMakeFiles/fit-model-simple.dir/fit-model-simple.cpp.o
 examples/fit-model-simple: examples/CMakeFiles/fit-model-simple.dir/build.make
-examples/fit-model-simple: /home/giang-rocker/anaconda3/lib/libopencv_imgcodecs.so.3.3.1
+examples/fit-model-simple: /home/giang-rocker/anaconda3/lib/libopencv_imgcodecs.so.3.2.0
 examples/fit-model-simple: /usr/lib/x86_64-linux-gnu/libboost_system.so
 examples/fit-model-simple: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
 examples/fit-model-simple: /usr/lib/x86_64-linux-gnu/libboost_program_options.so
-examples/fit-model-simple: /home/giang-rocker/anaconda3/lib/libopencv_imgproc.so.3.3.1
-examples/fit-model-simple: /home/giang-rocker/anaconda3/lib/libopencv_core.so.3.3.1
+examples/fit-model-simple: /home/giang-rocker/anaconda3/lib/libopencv_imgproc.so.3.2.0
+examples/fit-model-simple: /home/giang-rocker/anaconda3/lib/libopencv_core.so.3.2.0
 examples/fit-model-simple: examples/CMakeFiles/fit-model-simple.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/giang-rocker/AniAge/eos/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable fit-model-simple"
-	cd /home/giang-rocker/AniAge/eos/build/examples && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/fit-model-simple.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/giang-rocker/AniAge/eosDetail/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable fit-model-simple"
+	cd /home/giang-rocker/AniAge/eosDetail/build/examples && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/fit-model-simple.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 examples/CMakeFiles/fit-model-simple.dir/build: examples/fit-model-simple
@@ -110,10 +110,10 @@ examples/CMakeFiles/fit-model-simple.dir/requires: examples/CMakeFiles/fit-model
 .PHONY : examples/CMakeFiles/fit-model-simple.dir/requires
 
 examples/CMakeFiles/fit-model-simple.dir/clean:
-	cd /home/giang-rocker/AniAge/eos/build/examples && $(CMAKE_COMMAND) -P CMakeFiles/fit-model-simple.dir/cmake_clean.cmake
+	cd /home/giang-rocker/AniAge/eosDetail/build/examples && $(CMAKE_COMMAND) -P CMakeFiles/fit-model-simple.dir/cmake_clean.cmake
 .PHONY : examples/CMakeFiles/fit-model-simple.dir/clean
 
 examples/CMakeFiles/fit-model-simple.dir/depend:
-	cd /home/giang-rocker/AniAge/eos/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/giang-rocker/AniAge/eos /home/giang-rocker/AniAge/eos/examples /home/giang-rocker/AniAge/eos/build /home/giang-rocker/AniAge/eos/build/examples /home/giang-rocker/AniAge/eos/build/examples/CMakeFiles/fit-model-simple.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/giang-rocker/AniAge/eosDetail/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/giang-rocker/AniAge/eosDetail /home/giang-rocker/AniAge/eosDetail/examples /home/giang-rocker/AniAge/eosDetail/build /home/giang-rocker/AniAge/eosDetail/build/examples /home/giang-rocker/AniAge/eosDetail/build/examples/CMakeFiles/fit-model-simple.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : examples/CMakeFiles/fit-model-simple.dir/depend
 

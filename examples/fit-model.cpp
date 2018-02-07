@@ -742,7 +742,7 @@ int main(int argc, char* argv[])
      
 
     // indicate landmark
-// The 2D and 3D point correspondences used for the fitting:
+    // The 2D and 3D point correspondences used for the fitting:
     vector<Vector4f> model_points; // the points in the 3D shape model
     vector<int> vertex_indices; // their vertex indices
     vector<Vector2f> image_points; // the corresponding 2D landmark points
@@ -757,15 +757,51 @@ int main(int argc, char* argv[])
             continue;
         }
         int vertex_idx = std::stoi(converted_name.value());
-        Vector4f vertex(current_mesh.vertices[vertex_idx][0], current_mesh.vertices[vertex_idx][1],
-                        current_mesh.vertices[vertex_idx][2], 1.0f);
+        Vector4f vertex(mesh.vertices[vertex_idx][0], mesh.vertices[vertex_idx][1],
+                        mesh.vertices[vertex_idx][2], 1.0f);
         model_points.emplace_back(vertex);
         vertex_indices.emplace_back(vertex_idx);
         image_points.emplace_back(landmarks[i].coordinates);
     }
+
+    tempVec3f << 255,255,255;
+
+    for (int i =0; i <mesh.vertices.size () ; i ++) {
+        mesh.colors.push_back( tempVec3f);
+
+    }
+
+    cv::Mat imageMarked = image;
+    int delta = 5;
+    for (int i =0; i < model_points.size () ; i ++) {
+
+        int cx = image_points.at(i)(0);
+        int cy = image_points.at(i)(1);
+        mesh.colors.at(vertex_indices.at(i))(0) = 255;
+        mesh.colors.at(vertex_indices.at(i))(1) = 0;
+        mesh.colors.at(vertex_indices.at(i))(2) = 0;
+
+        for (int  x = cx-delta; x < cx+ delta; x++) 
+            for (int y = cy-delta; y < cy+delta; y++)
+                {
+                 
+                imageMarked.at<cv::Vec3b>(y,x)[0] = 0;//b
+                imageMarked.at<cv::Vec3b>(y,x)[1] = 0;//g
+                imageMarked.at<cv::Vec3b>(y,x)[2] = 255;//r
+
+                }
+    }
+    cv::imwrite("imageMarked.jpg", imageMarked);
+    freopen ("meshMarked.off","w",stdout);
+    cout << "COFF" << endl;
+    cout << mesh.vertices.size () << " " << mesh.tvi.size () << " 0" << endl; 
+   for (int i =0; i < mesh.vertices.size (); i++)
+    cout << mesh.vertices.at (i). transpose  () << " " << mesh.colors.at(i).transpose() << " 1 " << endl;
     
+    for (int i =0; i < mesh.tvi.size (); i++)
+        cout << 3 << " "<< mesh.tvi.at (i)[0]<<" " << mesh.tvi.at (i)[1]<<" " << mesh.tvi.at (i)[2]<< endl;
 
-
+    return 0 ;
     // end of indicate ladmark
 
     

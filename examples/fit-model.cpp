@@ -764,53 +764,32 @@ int main(int argc, char* argv[])
         image_points.emplace_back(landmarks[i].coordinates);
     }
 
-    tempVec3f << 255,255,255;
-
-    for (int i =0; i <mesh.vertices.size () ; i ++) {
-        mesh.colors.push_back( tempVec3f);
-
-    }
-
-    cv::Mat imageMarked = image;
+    
+    
     int delta = 5;
     for (int i =0; i < model_points.size () ; i ++) {
 
         int cx = image_points.at(i)(0);
         int cy = image_points.at(i)(1);
-        mesh.colors.at(vertex_indices.at(i))(0) = 255;
-        mesh.colors.at(vertex_indices.at(i))(1) = 0;
-        mesh.colors.at(vertex_indices.at(i))(2) = 0;
-
+     
         for (int  x = cx-delta; x < cx+ delta; x++) 
             for (int y = cy-delta; y < cy+delta; y++)
                 {
                  
-                imageMarked.at<cv::Vec3b>(y,x)[0] = 0;//b
-                imageMarked.at<cv::Vec3b>(y,x)[1] = 0;//g
-                imageMarked.at<cv::Vec3b>(y,x)[2] = 255;//r
+                image.at<cv::Vec3b>(y,x)[0] = 0;//b
+                image.at<cv::Vec3b>(y,x)[1] = 0;//g
+                image.at<cv::Vec3b>(y,x)[2] = 255;//r
 
                 }
     }
-    cv::imwrite("imageMarked.jpg", imageMarked);
-    freopen ("meshMarked.off","w",stdout);
-    cout << "COFF" << endl;
-    cout << mesh.vertices.size () << " " << mesh.tvi.size () << " 0" << endl; 
-   for (int i =0; i < mesh.vertices.size (); i++)
-    cout << mesh.vertices.at (i). transpose  () << " " << mesh.colors.at(i).transpose() << " 1 " << endl;
-    
-    for (int i =0; i < mesh.tvi.size (); i++)
-        cout << 3 << " "<< mesh.tvi.at (i)[0]<<" " << mesh.tvi.at (i)[1]<<" " << mesh.tvi.at (i)[2]<< endl;
-
-    return 0 ;
-    // end of indicate ladmark
-
+   
     
     canculateNormalVector(mesh);
 
     const int imgw = image.cols;
     const int imgh = image.rows;
     uint8_t r,g,b;  
-    Mat imageOriginal = cv::imread(imagefile); 
+   
 
     cout <<"image size: " << image.cols << " x " << image.rows <<endl; 
 
@@ -906,14 +885,14 @@ int main(int argc, char* argv[])
      cout << (_2DimageRealZ.size ()) << " 0 0" << endl;
     for (int i =0; i < imgw; i++) {
         for (int  j =0 ; j < imgh; j++){
-        b=imageOriginal.at<cv::Vec3b>(j,i)[0];//R
-        g=imageOriginal.at<cv::Vec3b>(j,i)[1];//B
-        r=imageOriginal.at<cv::Vec3b>(j,i)[2];//G
+        b=image.at<cv::Vec3b>(j,i)[0];//R
+        g=image.at<cv::Vec3b>(j,i)[1];//B
+        r=image.at<cv::Vec3b>(j,i)[2];//G
 
 
         if ( depthMap[i][j]!=-9999  )
         {         
-                cout << (i) <<" " << (j) << " " << (depthMap[i][j]) <<  " "  << (int) r << " "  << (int) g << " " << (int) b << " 1"   <<endl ;
+                cout << (i) <<" " << (j) << " " << (depthMap[i][j]) <<  " "  << (int) r << " "  << (int) r << " " << (int) r << " 1"   <<endl ;
                 count ++;
         }
         } // 2nd for    

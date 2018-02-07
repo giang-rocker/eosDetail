@@ -49,6 +49,7 @@
 #include <experimental/optional>
 #include <string>
 #include <vector>
+#include <cmath>
 
 #include "eos/core/Mesh.hpp"
 
@@ -445,12 +446,13 @@ void getRGB (Mesh current_mesh,cv::Mat image, const core::LandmarkCollection<Eig
    
 }
 
-void write2DImangeZIntensity(vector <vector <float> > depthMap,  cv::Mat image) {
+void write2DImangeZIntensity(vector <vector <float> > depthMap,  cv::Mat image,vector<vector< int > > mapping2D3D, Mesh mesh) {
     const int imgw = image.cols;
     const int imgh = image.rows;
  
     uint8_t r,g,b,grey;
      freopen("2DImageZIntensity.txt","w",stdout);
+     int count = 0;
     for (int i =0; i < imgw; i++) 
         for (int  j =0 ; j < imgh; j++){
         b=image.at<cv::Vec3b>(j,i)[0];//R
@@ -458,8 +460,27 @@ void write2DImangeZIntensity(vector <vector <float> > depthMap,  cv::Mat image) 
         r=image.at<cv::Vec3b>(j,i)[2];//G
 
 
-        if ( depthMap[i][j]!=-9999  )
+        if ( depthMap[i][j]!=-9999  ) {
                 cout << (i) <<" " << (j) << " " << (depthMap[i][j]) <<" " << getIntensity((int)r,(int)g,(int)b)  <<   endl ;
+                count++;
+            }
+          
+    }  
+
+     //verify Result mapiing
+     freopen("verifyMapping2D3D.off","w",stdout);
+     cout << "COFF" << endl;
+     cout << count  << " 0 0" << endl;
+    for (int i =0; i < imgw; i++) 
+        for (int  j =0 ; j < imgh; j++){
+        b=image.at<cv::Vec3b>(j,i)[0];//R
+        g=image.at<cv::Vec3b>(j,i)[1];//B
+        r=image.at<cv::Vec3b>(j,i)[2];//G
+        int index = mapping2D3D[i][j];
+
+
+        if (index==-1) continue;
+        cout << mesh.vertices[index](0) <<" " <<  mesh.vertices[index](1) << " " <<  mesh.vertices[index](2) <<" " << (int) r << " " << (int) g << " " << (int) b << " 1" <<   endl ;
           
     }  
 
@@ -502,11 +523,14 @@ vector <vector <bool>> check;
 for (int i =0; i < mesh.vertices.size (); i++) {
     vector <bool > row;
     vector <int> rowInt;
-    edge.push_back(rowInt);
-    for (int j =0; j < mesh.vertices.size (); j++)
+    
+    for (int j =0; j < mesh.vertices.size (); j++) {
         row.push_back(false);
+        rowInt.push_back(-1);
+    }
 
     check.push_back(row);
+    edge.push_back(rowInt);
 }
 
     for (auto& triangle: mesh.tvi) {
@@ -552,11 +576,52 @@ int numOfPoint = mesh.vertices.size ();
         VectorXf singularValues =  svd.singularValues() ;
         MatrixXf U = svd.matrixU();
         mesh.normalVector.push_back(VectorXf(U.col(2)));
-        mesh.eigeinValue.push_back(singularValues(2));
+        mesh.eigeinValue.push_back(fabs(singularValues(2)));
         
     }
 
    
+}
+
+void getConstanceL(Vector3f A, double& l0, double& l1, double& l2, double& l3) {
+
+    l0 = sqrt ( 1.0f /(4*M_PI) );
+    l1 =A(0) * sqrt( ( 3.0f) /(4*M_PI) );
+    l2 = A(1) *  sqrt(( 3.0f) /(4*M_PI) );
+    l3 =A(2) *  sqrt( (3.0f) /(4*M_PI) );
+}
+
+
+void writeParameterOptimization (vector <vector <float> > depthMap,vector <vector <int> > mapping2D3D,  cv::Mat image,vector <Vector2f>& textCoor, Mesh mesh) {
+    double l0,l1,l2,l3,A,B,_b, N;
+     uint8_t r,g,b,grey;
+    freopen ("parameters.txt","w",stdout);
+    for (int i =0; i < mesh.vertices.size (); i++) {
+        if (textCoor.at(i)(0)==-1) continue;
+        getConstanceL((mesh.vertices.at(i)),l0,l1,l2,l3);
+        N = mesh.eigeinValue.at(i);
+        int u = textCoor.at(i)(0);
+        int v = textCoor.at(i)(1);
+
+        int mapU1V = mapping2D3D[u+1][v];
+        int mapUV1 = mapping2D3D[u][v+1];
+
+        if (mapUV1==-1 || mapU1V==-1) continue;
+
+        float zU1V = mesh.vertices[mapU1V](2);
+        float zUV1 = mesh.vertices[mapUV1](2);
+
+        double I = getIntensity((int) r, (int )g, (int) b);
+
+        A = - (l1+l2)/N;
+        B = - ( I + l0 - ( l3-(l1*zU1V + l2*zUV1)/N  ));
+        _b = mesh.vertices.at(i)(2);
+
+        cout << A << " " << B << " " << _b  << endl;
+
+
+    }
+
 }
  
 
@@ -740,14 +805,21 @@ int main(int argc, char* argv[])
 
     vector <vector <float> > depthMap;
     vector <Vector2f> textCoor ;
+    vector <vector <int> > mapping2D3D;
+    vector <vector <double> > currentLen;
    
      for (int i =0; i < imgw; i++){
         vector <float> row;
+        vector <double> rowDouble ;
+        vector <int> rowInt ;
         for (int  j =0 ; j < imgh; j++){
                  row.push_back(-9999.0f);
-         //           mapping[i][j] = -1;
+                 rowDouble.push_back(9999);
+                 rowInt.push_back(-1);
         }
         depthMap.push_back(row);
+        currentLen.push_back(rowDouble);
+        mapping2D3D.push_back(rowInt);
     }
 
     // init textCoor
@@ -761,8 +833,10 @@ int main(int argc, char* argv[])
     // get depth & get mapping 3D to 2D
     render::add_depth_information(outimg, mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
                            fitting::get_opencv_viewport(image.cols, image.rows),depthMap,textCoor, scale);
-    
-   
+    // get mapping 2D to 3D index
+    render::getMapping2D3DBy2D(outimg, mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
+                           fitting::get_opencv_viewport(image.cols, image.rows), mapping2D3D,currentLen );
+                           
     freopen ("depthmap.off","w",stdout);
     cout << "COFF\n";
      cout << (_2DimageRealZ.size ()) << " 0 0" << endl;
@@ -783,8 +857,9 @@ int main(int argc, char* argv[])
 
     cout << count << endl;
 
-    write2DImangeZIntensity(depthMap,image);
+    write2DImangeZIntensity(depthMap,image,mapping2D3D,mesh);
     write3DTo2DMapping(textCoor, mesh,image);
+    writeParameterOptimization(depthMap,mapping2D3D, image,textCoor, mesh) ;
 
     
    

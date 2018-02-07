@@ -302,11 +302,15 @@ inline void getMapping2D3DBy2D(cv::Mat image, const core::Mesh& mesh, glm::mat4x
             
             for (int i = minX; i <=  maxX; i++)
                 for (int j =minY; j <= maxY; j++) {
+
                     Vector2f currentPoint;
                     currentPoint << i,j ;
-                   double L1=  getLen ( x1,currentPoint   );
-                   double L2=  getLen ( x2,currentPoint   );
-                   double L3=  getLen ( x3,currentPoint   );
+
+                     if (!(insideABC(x1,x2,x3,currentPoint))) continue;
+
+                    double L1=  getLen ( x1,currentPoint   );
+                    double L2=  getLen ( x2,currentPoint   );
+                    double L3=  getLen ( x3,currentPoint   );
                     
                    if (L1 < currentLen[i][j]) { currentLen[i][j] = L1; mapping[i][j] = triangle[0] ; }
                    if (L2 < currentLen[i][j]) { currentLen[i][j] = L2; mapping[i][j] = triangle[1] ; }    

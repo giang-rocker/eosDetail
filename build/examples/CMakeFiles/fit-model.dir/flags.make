@@ -6,5 +6,5 @@ CXX_FLAGS =   -std=c++1z
 
 CXX_DEFINES = 
 
-CXX_INCLUDES = -isystem /home/giang-rocker/anaconda3/include -isystem /home/giang-rocker/anaconda3/include/opencv -I/home/giang-rocker/AniAge/eosDetail/include -I/home/giang-rocker/AniAge/eosDetail/3rdparty/cereal/include -I/home/giang-rocker/AniAge/eosDetail/3rdparty/eigen -I/home/giang-rocker/AniAge/eosDetail/3rdparty/glm -I/home/giang-rocker/AniAge/eosDetail/3rdparty/nanoflann/include -I/home/giang-rocker/AniAge/eosDetail/3rdparty/eigen3-nnls/src -I/home/giang-rocker/AniAge/eosDetail/3rdparty/toml11 
+CXX_INCLUDES = -I/usr/include/opencv -I/home/giang-rocker/AniAge/eos/include -I/home/giang-rocker/AniAge/eos/3rdparty/cereal/include -I/home/giang-rocker/AniAge/eos/3rdparty/eigen -I/home/giang-rocker/AniAge/eos/3rdparty/glm -I/home/giang-rocker/AniAge/eos/3rdparty/nanoflann/include -I/home/giang-rocker/AniAge/eos/3rdparty/eigen3-nnls/src -I/home/giang-rocker/AniAge/eos/3rdparty/toml11 
 

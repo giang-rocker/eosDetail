@@ -114,12 +114,13 @@ inline void mapping(cv::Mat image, const core::Mesh& mesh, glm::mat4x4 modelview
 inline void add_depth_information(cv::Mat image, const core::Mesh mesh, glm::mat4x4 modelview,
                            glm::mat4x4 projection, glm::vec4 viewport,
                            vector <vector <float > >& depthMap, 
+                           vector <Vector2f>  & textCoor,
                              float _scale, 
                            cv::Scalar color = cv::Scalar(0, 255, 0, 255))
 {
 
 
-    float scale = _scale;
+    float scale = 10.0f;// _scale;
  
     for (const auto& triangle : mesh.tvi)
     {
@@ -146,6 +147,10 @@ inline void add_depth_information(cv::Mat image, const core::Mesh mesh, glm::mat
             depthMap[(int)p1.x][(int)p1.y] =  p1z ;
             depthMap[(int)p2.x][(int)p2.y] =  p2z ;
             depthMap[(int)p3.x][(int)p3.y] =  p3z ;
+
+            textCoor.at(triangle[0])(0) = (int)p1.x;textCoor.at(triangle[0])(1) = (int)p1.y;
+            textCoor.at(triangle[1])(0) = (int)p2.x;textCoor.at(triangle[1])(1) = (int)p2.y;
+            textCoor.at(triangle[2])(0) = (int)p3.x;textCoor.at(triangle[2])(1) = (int)p3.y;
             
               
             float A[3]  ; A[0]  =  (p2.x-p1.x); A[1]  = (p2.y-p1.y); A[2]  = (p2z-p1z); 

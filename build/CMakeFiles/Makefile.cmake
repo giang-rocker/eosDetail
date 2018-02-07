@@ -15,10 +15,6 @@ set(CMAKE_MAKEFILE_DEPENDS
   "CMakeFiles/feature_tests.c"
   "CMakeFiles/feature_tests.cxx"
   "../examples/CMakeLists.txt"
-  "/home/giang-rocker/anaconda3/share/OpenCV/OpenCVConfig-version.cmake"
-  "/home/giang-rocker/anaconda3/share/OpenCV/OpenCVConfig.cmake"
-  "/home/giang-rocker/anaconda3/share/OpenCV/OpenCVModules-release.cmake"
-  "/home/giang-rocker/anaconda3/share/OpenCV/OpenCVModules.cmake"
   "/usr/local/share/cmake-3.10/Modules/CMakeCCompiler.cmake.in"
   "/usr/local/share/cmake-3.10/Modules/CMakeCCompilerABI.c"
   "/usr/local/share/cmake-3.10/Modules/CMakeCInformation.cmake"
@@ -96,8 +92,6 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/usr/local/share/cmake-3.10/Modules/Compiler/zOS-C-DetermineCompiler.cmake"
   "/usr/local/share/cmake-3.10/Modules/Compiler/zOS-CXX-DetermineCompiler.cmake"
   "/usr/local/share/cmake-3.10/Modules/FindBoost.cmake"
-  "/usr/local/share/cmake-3.10/Modules/FindPackageHandleStandardArgs.cmake"
-  "/usr/local/share/cmake-3.10/Modules/FindPackageMessage.cmake"
   "/usr/local/share/cmake-3.10/Modules/InstallRequiredSystemLibraries.cmake"
   "/usr/local/share/cmake-3.10/Modules/Internal/FeatureTesting.cmake"
   "/usr/local/share/cmake-3.10/Modules/Platform/Linux-Determine-CXX.cmake"
@@ -107,6 +101,10 @@ set(CMAKE_MAKEFILE_DEPENDS
   "/usr/local/share/cmake-3.10/Modules/Platform/Linux.cmake"
   "/usr/local/share/cmake-3.10/Modules/Platform/UnixPaths.cmake"
   "/usr/local/share/cmake-3.10/Templates/CPackConfig.cmake.in"
+  "/usr/share/OpenCV/OpenCVConfig-version.cmake"
+  "/usr/share/OpenCV/OpenCVConfig.cmake"
+  "/usr/share/OpenCV/OpenCVModules-release.cmake"
+  "/usr/share/OpenCV/OpenCVModules.cmake"
   )
 
 # The corresponding makefile is:

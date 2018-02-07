@@ -398,6 +398,10 @@ void get2DimageRealZ(Mesh mesh,vector <VectorXf>  _2DimageZ, vector<vector <int 
 
 }
 
+float getIntensity(int r, int g, int b) {
+    return 0.2126*r + 0.7152*g + 0.0722*b;
+}
+
 void getRGB(vector <Vector2f> textCoor ,cv::Mat image, vector <Vector3d>& textColor, vector <int>& intent  ){
     const int imgw = image.cols;
     const int imgh = image.rows;
@@ -440,7 +444,57 @@ void getRGB (Mesh current_mesh,cv::Mat image, const core::LandmarkCollection<Eig
     getRGB(textCoor,image,textColor,intent );
    
 }
+
+void write2DImangeZIntensity(vector <vector <float> > depthMap,  cv::Mat image) {
+    const int imgw = image.cols;
+    const int imgh = image.rows;
  
+    uint8_t r,g,b,grey;
+     freopen("2DImageZIntensity.txt","w",stdout);
+    for (int i =0; i < imgw; i++) 
+        for (int  j =0 ; j < imgh; j++){
+        b=image.at<cv::Vec3b>(j,i)[0];//R
+        g=image.at<cv::Vec3b>(j,i)[1];//B
+        r=image.at<cv::Vec3b>(j,i)[2];//G
+
+
+        if ( depthMap[i][j]!=-9999  )
+                cout << (i) <<" " << (j) << " " << (depthMap[i][j]) <<" " << getIntensity((int)r,(int)g,(int)b)  <<   endl ;
+          
+    }  
+
+
+}
+
+void write3DTo2DMapping(vector <Vector2f>& textCoor, Mesh mesh, cv::Mat image) {
+   
+     freopen("3DTo2DMapping.txt","w",stdout);
+    
+    for (int i=0; i < textCoor.size (); i++) {
+        cout << ((int)textCoor.at(i)(0) ) << " " << ((int)textCoor.at(i)(1) ) << " " << mesh.eigeinValue.at(i)<< endl;
+
+    }
+
+    //verify Result
+    uint8_t r,g,b,grey;
+    freopen ("verifyMapping3D2D.off","w",stdout);
+    cout << "COFF" << endl;
+    cout << textCoor.size () << " 0 0 \n" ;
+    for (int k=0; k < textCoor.size (); k++) {
+
+        int i =  ((int)textCoor.at(k)(0) );
+        int j =  ((int)textCoor.at(k)(1) );
+
+        b=image.at<cv::Vec3b>(j,i)[0];//R
+        g=image.at<cv::Vec3b>(j,i)[1];//B
+        r=image.at<cv::Vec3b>(j,i)[2];//G
+
+        cout << mesh.vertices.at(k)(0) << " " << mesh.vertices.at(k)(1) << " " << mesh.vertices.at(k)(2) << " " <<(int) r <<" " <<(int) g <<" " << (int) b << " 1" << endl;
+
+    }
+
+}
+
 void getEdgeFromMesh ( Mesh mesh, vector <vector <int>>& edge ) {
     
 vector <vector <bool>> check;
@@ -472,7 +526,7 @@ for (int i =0; i < mesh.vertices.size (); i++) {
 
 }
 
-void canculateNormalVector (Mesh& mesh) {
+void canculateNormalVector (Mesh& mesh ) {
 
     vector <vector <int> > edge;
     getEdgeFromMesh(mesh, edge);
@@ -495,7 +549,7 @@ int numOfPoint = mesh.vertices.size ();
         VectorXf singularValues =  svd.singularValues() ;
         MatrixXf U = svd.matrixU();
         mesh.normalVector.push_back(VectorXf(U.col(2)));
-       // normalValue.push_back(singularValues(2));
+        mesh.eigeinValue.push_back(singularValues(2));
         
     }
 
@@ -617,7 +671,9 @@ int main(int argc, char* argv[])
     render::draw_wireframe(outimg, mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
                          fitting::get_opencv_viewport(image.cols, image.rows));
      
-     canculateNormalVector(mesh);
+
+    
+    canculateNormalVector(mesh);
 
     const int imgw = image.cols;
     const int imgh = image.rows;
@@ -660,6 +716,7 @@ int main(int argc, char* argv[])
    cout << "scale: " << scale << endl;
     
     /*
+    // WRITE 2D IMAGE & IMAGE PLAN
     freopen ("_2DimageRealZ.off","w",stdout);
     cout << "COFF\n";
     cout << (_2DimageZ.size () + mesh.vertices.size () ) << " 0 0" << endl;
@@ -675,10 +732,11 @@ int main(int argc, char* argv[])
     } 
 
     for (int i=0 ; i < mesh.vertices.size () ; i ++)
-        cout << mesh.vertices.at (i)( 0) << " "<< mesh.vertices.at (i)( 1) << " "<< 27 << " " << " 200 200 200 1" << endl;
+        cout << mesh.vertices.at (i)( 0) << " "<< mesh.vertices.at (i)( 1) << " "<< mesh.vertices.at (i)(2) << " " << " 200 200 200 1" << endl;
     */
 
     vector <vector <float> > depthMap;
+    vector <Vector2f> textCoor ;
    
      for (int i =0; i < imgw; i++){
         vector <float> row;
@@ -689,11 +747,17 @@ int main(int argc, char* argv[])
         depthMap.push_back(row);
     }
 
+    // init textCoor
+   tempVec2f << (-1.0f),(-1.0f);
+   for (int i =0; i < mesh.vertices.size (); i++ ) {
+        textCoor.push_back (tempVec2f);
+   }
+
     int count = 0;
     
-
+    // get depth & get mapping 3D to 2D
     render::add_depth_information(outimg, mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
-                           fitting::get_opencv_viewport(image.cols, image.rows),depthMap, scale);
+                           fitting::get_opencv_viewport(image.cols, image.rows),depthMap,textCoor, scale);
     
    
     freopen ("depthmap.off","w",stdout);
@@ -715,91 +779,12 @@ int main(int argc, char* argv[])
     } //1st for
 
     cout << count << endl;
+
+    write2DImangeZIntensity(depthMap,image);
+    write3DTo2DMapping(textCoor, mesh,image);
+
     
-    /*
-    int image_height = image.rows;
-    int image_width = image.cols;
-
-    vector <vector <int>> mapping;
-    vector <vector <double >> currentLen;
-
-
-
-    for (int i =0; i < imgw; i++) {
-        vector <int > row; 
-        vector <double > row1; 
-        for (int  j =0 ; j < imgh; j++){
-               row.push_back(-1);
-               row1.push_back(9999.0f);
-        }
-        mapping.push_back (row);
-        currentLen.push_back(row1);
-
-    }
-
-    Mesh avgMesh = mesh;
-    vector <int> intent ;
-    vector <Vector3d> textColor ;
-    vector <Vector2f> textCoor ;
-    vector <Vector3f> _2DimageZ;
-    getRGB(avgMesh,image,landmarks, landmark_mapper,textColor,intent,textCoor,_2DimageZ);
-    
-    render::getMapping2D3D(outimg, mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
-                           fitting::get_opencv_viewport(image.cols, image.rows),mapping,currentLen);
    
-    freopen ("grey_image.off","w",stdout);
-    cout << "COFF\n";
-    cout << intent.size () << " 0 0" << endl;
-  
-
-    for (int i = 0; i < mesh.vertices.size(); ++i)
-    {
-     cout << avgMesh.vertices[i][0] <<" " <<avgMesh.vertices[i][1] <<" " <<avgMesh.vertices[i][2] <<" " << textColor.at(i)(0) << " " << textColor.at(i)(1) << " " << textColor.at(i)(2) << " 1"<< endl;
-
-    }
-
-
-    freopen ("Mapping2D3D_070.txt","w",stdout);
-    count = 0;
-    cout << imgw << " " << imgh << endl;
-     for (int i =0; i < imgw; i++) 
-        for (int  j =0 ; j < imgh; j++)
-            if (mapping[i][j]!= -1)
-            if ( depthMap[i][j]!=-9999 &&  depthMap[i][j] <= bounder[4] &&   depthMap[i][j] >= bounder[5] ){
-            cout << i << " " << j << " " << mapping[i][j] << endl;
-            count++;
-        }
-  
-
-
-    freopen ("Mapping3D2D_070.txt","w",stdout);
-    cout <<textCoor.size()<< endl;
-    for (int i = 0; i < textCoor.size(); ++i)
-    {
-            cout << i << " " <<  (int)textCoor.at(i)(0)<< " " <<  (int)textCoor.at(i)(1)<< " " <<  (int)textColor.at(i)(0)<< " " <<  (int)textColor.at(i)(1)<< " " <<  (int)textColor.at(i)(2) << " " << (int)intent.at(i) << endl;
-    }
-
-    freopen ("check2D2.off","w",stdout);
-    cout << "COFF\n";
-    cout << count << " 0 0 " << endl;
-   
-    for (int k=0; k < _2DimageZ.size (); k++) {
-        int i= (int) _2DimageZ.at(k)(0);
-        int j= (int) _2DimageZ.at(k)(1);
-        if (mapping[i][j]!= -1) 
-            if ( depthMap[i][j]!=-9999 &&  depthMap[i][j] <= bounder[4] &&   depthMap[i][j] >= bounder[5] ){
-            b=image.at<cv::Vec3b>(j,i)[0];//b
-            g=image.at<cv::Vec3b>(j,i)[1];//g
-            r=image.at<cv::Vec3b>(j,i)[2];//r
-            cout << i << " " << j << " " << _2DimageZ.at(k)(2) << " " << (int)r<< " " << (int)g<< " " << (int)b<< " 1" << endl;
-            }
-    }
-    
-  
-
-    // END OF GET INTENSITY
- */
-
     fs::path outputfile = outputbasename + ".png";
     cv::imwrite(outputfile.string(), outimg);
 

@@ -561,6 +561,7 @@ void canculateNormalVector (Mesh& mesh ) {
 int numOfPoint = mesh.vertices.size ();
 // calculate normalvector of each vertex
     for (int i =0; i < numOfPoint; i ++) {
+
         MatrixXf A( edge.at(i).size() , 3);
         
         for (int j = 0; j < edge.at(i).size (); j++) {
@@ -739,6 +740,33 @@ int main(int argc, char* argv[])
     render::draw_wireframe(outimg, mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
                          fitting::get_opencv_viewport(image.cols, image.rows));
      
+
+    // indicate landmark
+// The 2D and 3D point correspondences used for the fitting:
+    vector<Vector4f> model_points; // the points in the 3D shape model
+    vector<int> vertex_indices; // their vertex indices
+    vector<Vector2f> image_points; // the corresponding 2D landmark points
+
+    // Sub-select all the landmarks which we have a mapping for (i.e. that are defined in the 3DMM),
+    // and get the corresponding model points (mean if given no initial coeffs, from the computed shape otherwise):
+    for (int i = 0; i < landmarks.size(); ++i)
+    {
+        auto converted_name = landmark_mapper.convert(landmarks[i].name);
+        if (!converted_name)
+        { // no mapping defined for the current landmark
+            continue;
+        }
+        int vertex_idx = std::stoi(converted_name.value());
+        Vector4f vertex(current_mesh.vertices[vertex_idx][0], current_mesh.vertices[vertex_idx][1],
+                        current_mesh.vertices[vertex_idx][2], 1.0f);
+        model_points.emplace_back(vertex);
+        vertex_indices.emplace_back(vertex_idx);
+        image_points.emplace_back(landmarks[i].coordinates);
+    }
+    
+
+
+    // end of indicate ladmark
 
     
     canculateNormalVector(mesh);

@@ -894,8 +894,8 @@ int main(int argc, char* argv[])
     freopen ("depthmap.off","w",stdout);
     cout << "COFF\n";
      cout << (_2DimageRealZ.size ()) << " 0 0" << endl;
-    for (int i =0; i < imgw; i++) {
-        for (int  j =0 ; j < imgh; j++){
+    for (int i =0; i < imgw; i+=4) {
+        for (int  j =0 ; j < imgh; j+=4){
         b=image.at<cv::Vec3b>(j,i)[0];//R
         g=image.at<cv::Vec3b>(j,i)[1];//B
         r=image.at<cv::Vec3b>(j,i)[2];//G
@@ -914,7 +914,7 @@ int main(int argc, char* argv[])
     } //1st for
 
     cout << count << endl;
-
+   
     freopen("triangle019.txt","r",stdin);
     int t1,t2,t3;
     while (scanf ("%d %d %d %d\n",&t1,&t1,&t2,&t3)!=EOF) {

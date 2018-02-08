@@ -2,4 +2,4 @@ cd ..
 make 
 cd examples
 echo "DONE make"
-./fit-model -i data/019.jpg -l data/019.pts
+./fit-model -i data/070.jpg -l data/070.pts

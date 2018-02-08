@@ -740,7 +740,7 @@ int main(int argc, char* argv[])
     render::draw_wireframe(outimg, mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
                          fitting::get_opencv_viewport(image.cols, image.rows));
      
-
+    cout << "XXX" << endl;
     // indicate landmark
     // The 2D and 3D point correspondences used for the fitting:
     vector<Vector4f> model_points; // the points in the 3D shape model
@@ -765,18 +765,20 @@ int main(int argc, char* argv[])
     }
 
     
-    
+    cout << model_points.size () << endl;
     int delta = 5;
 
-    int markedIndex[] = {20,0,23,26,29,32,38};
+    
 
-    for (int i =0; i < 7 ; i ++) {
+    for (int i =0; i < image_points.size() ; i ++) {
 
-        int cx = image_points.at(markedIndex[i])(0);
-        int cy = image_points.at(markedIndex[i])(1);
-     
-        for (int  x = cx-delta; x < cx+ delta; x++) 
-            for (int y = cy-delta; y < cy+delta; y++)
+        int cx = image_points.at(i)(0);
+        int cy = image_points.at(i)(1);
+
+        cout << cx << " " << cy << endl;
+
+        for (int  x = cx-delta; x < cx+ delta && x < image.cols; x++) 
+            for (int y = cy-delta; y < cy+delta && y < image.rows; y++)
                 {
                  
                 image.at<cv::Vec3b>(y,x)[0] = 0;//b
@@ -784,9 +786,22 @@ int main(int argc, char* argv[])
                 image.at<cv::Vec3b>(y,x)[2] = 255;//r
 
                 }
-    }
    
-    
+    }
+    int currentLandMarkId =0 ;
+    freopen ("meanfaceLandmark.off", "w",stdout);
+    cout << mesh.vertices.size() << " " << mesh.tvi.size () << " 0" << endl; 
+    for (int i =0 ; i < mesh.vertices.size(); i ++) {
+        if (i == vertex_indices.at(currentLandMarkId))
+            cout<< mesh.vertices.at(i).transpose() << " 255 0 0 1" << endl;
+            else 
+        cout<< mesh.vertices.at(i).transpose() << " 255 255 255 1" << endl;
+    }
+
+     for (int i =0 ; i < mesh.tvi.size(); i ++)
+        cout << 3 << " "<< mesh.tvi.at(i)[0]<< " "<< mesh.tvi.at(i)[1]<< " "<< mesh.tvi.at(i)[2] << endl;
+
+    cv::imwrite("imageMarked.jpg", image);
     canculateNormalVector(mesh);
 
     const int imgw = image.cols;
@@ -911,7 +926,7 @@ int main(int argc, char* argv[])
    
     fs::path outputfile = outputbasename + ".png";
     cv::imwrite(outputfile.string(), outimg);
-     cv::imwrite("imageMarked.jpg", image);
+    cv::imwrite("imageMarked.jpg", image);
 
     // Save the mesh as textured obj:
     outputfile.replace_extension(".obj");

@@ -766,6 +766,7 @@ int main(int argc, char* argv[])
    
     }
 
+    mesh =  morphable_model.get_mean();
 
     int currentLandMarkId =0 ;
     vector<Vector3d>  clor ; 

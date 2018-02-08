@@ -722,9 +722,13 @@ int main(int argc, char* argv[])
     // Fit the model, get back a mesh and the pose:
     core::Mesh mesh;
     fitting::RenderingParameters rendering_params;
+     vector<Eigen::Vector4f> model_points; // the points in the 3D shape model
+    vector<int> vertex_indices; // their vertex indices
+    vector<Eigen::Vector2f> image_points; // the corresponding 2D landmark points
+
     std::tie(mesh, rendering_params) = fitting::fit_shape_and_pose(
         morphable_model, blendshapes, landmarks, landmark_mapper, image.cols, image.rows, edge_topology,
-        ibug_contour, model_contour, 5, std::nullopt, 30.0f);
+        ibug_contour, model_contour,model_points,vertex_indices,image_points, 5, std::nullopt, 30.0f);
 
     // The 3D head pose can be recovered as follows:
     float yaw_angle = glm::degrees(glm::yaw(rendering_params.get_rotation()));
@@ -741,44 +745,17 @@ int main(int argc, char* argv[])
                          fitting::get_opencv_viewport(image.cols, image.rows));
      
     cout << "XXX" << endl;
-    // indicate landmark
-    // The 2D and 3D point correspondences used for the fitting:
-    vector<Vector4f> model_points; // the points in the 3D shape model
-    vector<int> vertex_indices; // their vertex indices
-    vector<Vector2f> image_points; // the corresponding 2D landmark points
+      int delta = 5;
 
-    // Sub-select all the landmarks which we have a mapping for (i.e. that are defined in the 3DMM),
-    // and get the corresponding model points (mean if given no initial coeffs, from the computed shape otherwise):
-    for (int i = 0; i < landmarks.size(); ++i)
-    {
-        auto converted_name = landmark_mapper.convert(landmarks[i].name);
-        if (!converted_name)
-        { // no mapping defined for the current landmark
-            continue;
-        }
-        int vertex_idx = std::stoi(converted_name.value());
-        Vector4f vertex(mesh.vertices[vertex_idx][0], mesh.vertices[vertex_idx][1],
-                        mesh.vertices[vertex_idx][2], 1.0f);
-        model_points.emplace_back(vertex);
-        vertex_indices.emplace_back(vertex_idx);
-        image_points.emplace_back(landmarks[i].coordinates);
-    }
-
-    
-    cout << model_points.size () << endl;
-    int delta = 5;
-
-    
+    cout << image_points.size () << endl;
 
     for (int i =0; i < image_points.size() ; i ++) {
 
         int cx = image_points.at(i)(0);
         int cy = image_points.at(i)(1);
 
-        cout << cx << " " << cy << endl;
-
-        for (int  x = cx-delta; x < cx+ delta && x < image.cols; x++) 
-            for (int y = cy-delta; y < cy+delta && y < image.rows; y++)
+         for (int  x = cx-delta; x>=0 && x < cx+ delta && x < image.cols ; x++) 
+            for (int y = cy-delta; y>=0 &&  y < cy+delta && y < image.rows  ; y++)
                 {
                  
                 image.at<cv::Vec3b>(y,x)[0] = 0;//b
@@ -788,14 +765,25 @@ int main(int argc, char* argv[])
                 }
    
     }
+
+
     int currentLandMarkId =0 ;
+    vector<Vector3d>  clor ; 
+    tempVec3d << 255,255,255;
+    for (int i=0; i < mesh.vertices.size(); i++ )
+        clor.push_back(tempVec3d);
+
+    for (int i=0; i < vertex_indices.size(); i++ )
+        clor.at(vertex_indices.at(i)) << 255,0,0;
+
+    cout << "XXX" << endl;
+
     freopen ("meanfaceLandmark.off", "w",stdout);
+    cout <<"COFF" << endl;
     cout << mesh.vertices.size() << " " << mesh.tvi.size () << " 0" << endl; 
     for (int i =0 ; i < mesh.vertices.size(); i ++) {
-        if (i == vertex_indices.at(currentLandMarkId))
-            cout<< mesh.vertices.at(i).transpose() << " 255 0 0 1" << endl;
-            else 
-        cout<< mesh.vertices.at(i).transpose() << " 255 255 255 1" << endl;
+         
+        cout<< mesh.vertices.at(i).transpose() << " " << clor.at(i).transpose() << " 1" << endl;
     }
 
      for (int i =0 ; i < mesh.tvi.size(); i ++)

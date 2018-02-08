@@ -272,7 +272,11 @@ inline std::pair<core::Mesh, fitting::RenderingParameters> fit_shape_and_pose(
     int num_iterations, std::optional<int> num_shape_coefficients_to_fit, float lambda,
     std::optional<fitting::RenderingParameters> initial_rendering_params,
     std::vector<float>& pca_shape_coefficients, std::vector<float>& blendshape_coefficients,
-    std::vector<Eigen::Vector2f>& fitted_image_points)
+    std::vector<Eigen::Vector2f>& fitted_image_points,
+    std::vector<Eigen::Vector4f>& model_points, // the points in the 3D shape model
+    std::vector<int>& vertex_indices, // their vertex indices
+    std::vector<Eigen::Vector2f>& image_points // the corresponding 2D landmark points
+    )
 {
     assert(blendshapes.size() > 0);
     assert(landmarks.size() >= 4);
@@ -317,9 +321,9 @@ inline std::pair<core::Mesh, fitting::RenderingParameters> fit_shape_and_pose(
         morphable_model.get_color_model().get_triangle_list(), morphable_model.get_texture_coordinates());
 
     // The 2D and 3D point correspondences used for the fitting:
-    vector<Vector4f> model_points; // the points in the 3D shape model
-    vector<int> vertex_indices; // their vertex indices
-    vector<Vector2f> image_points; // the corresponding 2D landmark points
+  //  vector<Vector4f> model_points; // the points in the 3D shape model
+  //  vector<int> vertex_indices; // their vertex indices
+  //  vector<Vector2f> image_points; // the corresponding 2D landmark points
 
     // Sub-select all the landmarks which we have a mapping for (i.e. that are defined in the 3DMM),
     // and get the corresponding model points (mean if given no initial coeffs, from the computed shape otherwise):
@@ -381,6 +385,8 @@ inline std::pair<core::Mesh, fitting::RenderingParameters> fit_shape_and_pose(
         // Add the contour correspondences to the set of landmarks that we use for the fitting:
         vertex_indices = fitting::concat(vertex_indices, vertex_indices_contour);
         image_points = fitting::concat(image_points, image_points_contour);
+
+        
 
         // Fit the occluding (away-facing) contour using the detected contour LMs:
         vector<Vector2f> occluding_contour_landmarks;
@@ -490,7 +496,11 @@ fit_shape_and_pose(const morphablemodel::MorphableModel& morphable_model,
                    const core::LandmarkMapper& landmark_mapper, int image_width, int image_height,
                    const morphablemodel::EdgeTopology& edge_topology,
                    const fitting::ContourLandmarks& contour_landmarks,
-                   const fitting::ModelContour& model_contour, int num_iterations = 5,
+                   const fitting::ModelContour& model_contour,
+                    std::vector<Eigen::Vector4f>& model_points, // the points in the 3D shape model
+                    std::vector<int>& vertex_indices, // their vertex indices
+                    std::vector<Eigen::Vector2f>& image_points, // the corresponding 2D landmark points
+                    int num_iterations = 5,
                    std::optional<int> num_shape_coefficients_to_fit = std::nullopt, float lambda = 50.0f)
 {
     std::vector<float> pca_coeffs;
@@ -499,7 +509,7 @@ fit_shape_and_pose(const morphablemodel::MorphableModel& morphable_model,
     return fit_shape_and_pose(morphable_model, blendshapes, landmarks, landmark_mapper, image_width,
                               image_height, edge_topology, contour_landmarks, model_contour, num_iterations,
                               num_shape_coefficients_to_fit, lambda, std::nullopt, pca_coeffs,
-                              blendshape_coeffs, fitted_image_points);
+                              blendshape_coeffs, fitted_image_points, model_points,vertex_indices,image_points);
 };
 
 } /* namespace fitting */

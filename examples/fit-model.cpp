@@ -892,7 +892,7 @@ int main(int argc, char* argv[])
 
         if ( depthMap[i][j]!=-9999  )
         {         
-                cout << (i) <<" " << (j) << " " << (depthMap[i][j]) <<  " "  << (int) r << " "  << (int) r << " " << (int) r << " 1"   <<endl ;
+                cout << (i) <<" " << (j) << " " << (depthMap[i][j]) <<  " "  << (int) r << " "  << (int) g << " " << (int) b << " 1"   <<endl ;
                 count ++;
         }
         } // 2nd for    

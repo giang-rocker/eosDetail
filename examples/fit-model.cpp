@@ -911,6 +911,7 @@ int main(int argc, char* argv[])
    
     fs::path outputfile = outputbasename + ".png";
     cv::imwrite(outputfile.string(), outimg);
+     cv::imwrite("imageMarked.jpg", image);
 
     // Save the mesh as textured obj:
     outputfile.replace_extension(".obj");

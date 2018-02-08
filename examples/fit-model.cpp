@@ -743,7 +743,7 @@ int main(int argc, char* argv[])
     // Draw the fitted mesh as wireframe, and save the image:
     render::draw_wireframe(outimg, mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
                          fitting::get_opencv_viewport(image.cols, image.rows));
-     
+     /*
     cout << "XXX" << endl;
       int delta = 5;
 
@@ -791,7 +791,8 @@ int main(int argc, char* argv[])
         cout << 3 << " "<< mesh.tvi.at(i)[0]<< " "<< mesh.tvi.at(i)[1]<< " "<< mesh.tvi.at(i)[2] << endl;
 
     cv::imwrite("imageMarked.jpg", image);
-    canculateNormalVector(mesh);
+    */
+    
 
     const int imgw = image.cols;
     const int imgh = image.rows;
@@ -886,7 +887,10 @@ int main(int argc, char* argv[])
     // get mapping 2D to 3D index
     render::getMapping2D3DBy2D(outimg, mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
                            fitting::get_opencv_viewport(image.cols, image.rows), mapping2D3D,currentLen );
-                           
+    
+    vector < Vector3f > pointCloud;
+     Mesh resultMesh;
+
     freopen ("depthmap.off","w",stdout);
     cout << "COFF\n";
      cout << (_2DimageRealZ.size ()) << " 0 0" << endl;
@@ -898,7 +902,11 @@ int main(int argc, char* argv[])
 
 
         if ( depthMap[i][j]!=-9999  )
-        {         
+        {       
+                tempVec3f << i ,j, depthMap[i][j];
+                resultMesh.vertices.push_back(tempVec3f);
+                tempVec3f << (int)r , (int)g, (int)b;
+                resultMesh.colors.push_back(tempVec3f);
                 cout << (i) <<" " << (j) << " " << (depthMap[i][j]) <<  " "  << (int) r << " "  << (int) g << " " << (int) b << " 1"   <<endl ;
                 count ++;
         }
@@ -906,6 +914,19 @@ int main(int argc, char* argv[])
     } //1st for
 
     cout << count << endl;
+
+    freopen("triangle019.txt","r",stdin);
+    int t1,t2,t3;
+    while (scanf ("%d %d %d %d\n",&t1,&t1,&t2,&t3)!=EOF) {
+        std::array<int, 3> x{ {t1, t2, t3} };
+        resultMesh.tvi.push_back(x);
+
+    }
+    canculateNormalVector(resultMesh);
+    core::write_obj(resultMesh, "checkkMesh.obj");
+
+    return 0;
+    
 
     write2DImangeZIntensity(depthMap,image,mapping2D3D,mesh);
     write3DTo2DMapping(textCoor, mesh,image);

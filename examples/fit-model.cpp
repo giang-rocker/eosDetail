@@ -555,14 +555,17 @@ for (int i =0; i < mesh.vertices.size (); i++) {
 
 void canculateNormalVector (Mesh& mesh ) {
 
-    vector <vector <int> > edge;
-    getEdgeFromMesh(mesh, edge);
-
+ vector <vector <int> > edge;
+ getEdgeFromMesh(mesh, edge);
+ MatrixXf A;
+ MatrixXf ATA;
+ VectorXf singularValues;
+ MatrixXf U;
 int numOfPoint = mesh.vertices.size ();
 // calculate normalvector of each vertex
     for (int i =0; i < numOfPoint; i ++) {
 
-        MatrixXf A( edge.at(i).size() , 3);
+      A = MatrixXf::Zero( edge.at(i).size() , 3);
         
         for (int j = 0; j < edge.at(i).size (); j++) {
             RowVector3f rowVec ;
@@ -570,12 +573,12 @@ int numOfPoint = mesh.vertices.size ();
             A.row(j) = rowVec;
         }
         
-        MatrixXf ATA = A.transpose()*A;
+        ATA = A.transpose()*A;
         // ATA = (U*S)*V
         JacobiSVD<MatrixXf> svd(ATA, ComputeThinU | ComputeThinV);
         
-        VectorXf singularValues =  svd.singularValues() ;
-        MatrixXf U = svd.matrixU();
+        singularValues =  svd.singularValues() ;
+        U = svd.matrixU();
         mesh.normalVector.push_back(VectorXf(U.col(2)));
         mesh.eigeinValue.push_back(fabs(singularValues(2)));
         

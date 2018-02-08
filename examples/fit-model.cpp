@@ -767,10 +767,13 @@ int main(int argc, char* argv[])
     
     
     int delta = 5;
-    for (int i =0; i < model_points.size () ; i ++) {
 
-        int cx = image_points.at(i)(0);
-        int cy = image_points.at(i)(1);
+    int markedIndex[] = {20,0,23,26,29,32,38};
+
+    for (int i =0; i < 7 ; i ++) {
+
+        int cx = image_points.at(markedIndex[i])(0);
+        int cy = image_points.at(markedIndex[i])(1);
      
         for (int  x = cx-delta; x < cx+ delta; x++) 
             for (int y = cy-delta; y < cy+delta; y++)

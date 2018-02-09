@@ -517,39 +517,46 @@ void write3DTo2DMapping(vector <Vector2f>& textCoor, Mesh mesh, cv::Mat image) {
 }
 
 void getEdgeFromMesh ( Mesh mesh, vector <vector <int>>& edge ) {
-    
-vector <vector <bool>> check;
-
-for (int i =0; i < mesh.vertices.size (); i++) {
-    vector <bool > row;
+ 
+for (int i =0; i < mesh.vertices.size (); i++) {    
     vector <int> rowInt;
-    
-    for (int j =0; j < mesh.vertices.size (); j++) {
-        row.push_back(false);
-        rowInt.push_back(-1);
-    }
-
-    check.push_back(row);
     edge.push_back(rowInt);
 }
-
+cout << "done init edge\n";
     for (auto& triangle: mesh.tvi) {
         int i1 = triangle[0];
         int i2 = triangle[1];
         int i3 = triangle[2];
+        
+        bool checka =  false,checkb = false;
+        for (int i =0; i < edge.at(i1).size ();i++) {
+            if (edge.at(i1)[i] ==i2 ) checka = true;
+            if (edge.at(i1)[i] ==i3 ) checkb = true;
+        }
+        if (!checka) edge.at(i1).push_back(i2);
+        if (!checkb) edge.at(i1).push_back(i3);
 
-        check[i1][i2] = true;
-        check[i2][i3] = true; 
-        check[i3][i1] = true; 
-        check[i2][i1] = true;
-        check[i3][i2] = true;
-        check[i1][i3] = true;
+        checka =  false;checkb = false;
+        for (int i =0; i < edge.at(i2).size ();i++) {
+            if (edge.at(i2)[i] ==i1 ) checka = true;
+            if (edge.at(i2)[i] ==i3 ) checkb = true;
+        }
+
+        if (!checka) edge.at(i2).push_back(i1);
+        if (!checkb) edge.at(i2).push_back(i3);
+
+        checka =  false;checkb = false;
+        for (int i =0; i < edge.at(i3).size ();i++) {
+            if (edge.at(i3)[i] ==i1 ) checka = true;
+            if (edge.at(i3)[i] ==i2 ) checkb = true;
+        }
+
+        if (!checka) edge.at(i3).push_back(i1);
+        if (!checkb) edge.at(i3).push_back(i2);
+         
     }
+  
 
-    for (int i =0; i < mesh.vertices.size (); i++)
-        for (int j =0; j < mesh.vertices.size (); j++)
-         if ( check[i][j]  ) 
-            edge.at(i).push_back(j);
 
 }
 
@@ -557,6 +564,7 @@ void canculateNormalVector (Mesh& mesh ) {
 
  vector <vector <int> > edge;
  getEdgeFromMesh(mesh, edge);
+ cout << "done get edge\n";
  MatrixXf A;
  MatrixXf ATA;
  VectorXf singularValues;
@@ -583,7 +591,7 @@ int numOfPoint = mesh.vertices.size ();
         mesh.eigeinValue.push_back(fabs(singularValues(2)));
         
     }
-
+cout << "done calculate noralVec\n";
    
 }
 
@@ -894,11 +902,11 @@ int main(int argc, char* argv[])
     vector < Vector3f > pointCloud;
      Mesh resultMesh;
 
-    freopen ("depthmap.off","w",stdout);
-    cout << "COFF\n";
-     cout << (_2DimageRealZ.size ()) << " 0 0" << endl;
-    for (int i =0; i < imgw; i+=4) {
-        for (int  j =0 ; j < imgh; j+=4){
+ //   freopen ("depthmap.off","w",stdout);
+  //  cout << "COFF\n";
+  //   cout << (_2DimageRealZ.size ()) << " 0 0" << endl;
+    for (int i =0; i < imgw; i++) {
+        for (int  j =0 ; j < imgh; j++){
         b=image.at<cv::Vec3b>(j,i)[0];//R
         g=image.at<cv::Vec3b>(j,i)[1];//B
         r=image.at<cv::Vec3b>(j,i)[2];//G
@@ -910,7 +918,7 @@ int main(int argc, char* argv[])
                 resultMesh.vertices.push_back(tempVec3f);
                 tempVec3f << (int)r , (int)g, (int)b;
                 resultMesh.colors.push_back(tempVec3f);
-                cout << (i) <<" " << (j) << " " << (depthMap[i][j]) <<  " "  << (int) r << " "  << (int) g << " " << (int) b << " 1"   <<endl ;
+     //           cout << (i) <<" " << (j) << " " << (depthMap[i][j]) <<  " "  << (int) r << " "  << (int) g << " " << (int) b << " 1"   <<endl ;
                 count ++;
         }
         } // 2nd for    
@@ -920,11 +928,16 @@ int main(int argc, char* argv[])
    
     freopen("triangle019.txt","r",stdin);
     int t1,t2,t3;
-    while (scanf ("%d %d %d %d\n",&t1,&t1,&t2,&t3)!=EOF) {
-        std::array<int, 3> x{ {t1, t2, t3} };
-        resultMesh.tvi.push_back(x);
 
+    for (int i =0; i < 179007; i++) {
+        cin >> t1 >> t1 >> t2 >> t3;
+        std::array<int, 3> x{ t1-1,t2-1, t3-1 };
+        resultMesh.tvi.push_back(x);
     }
+
+    cout << "size of triangle :" ;
+    cout << resultMesh.tvi.size () << endl;
+        cout << "start calculate normal vector"<< endl;
     canculateNormalVector(resultMesh);
     core::write_obj(resultMesh, "checkkMesh.obj");
 

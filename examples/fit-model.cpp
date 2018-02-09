@@ -521,7 +521,7 @@ void getEdgeFromMesh ( Mesh& mesh  ) {
 for (int i =0; i < mesh.vertices.size (); i++) {    
     vector <int> rowInt;
     mesh.edge.push_back(rowInt);
-    mesh.neibour.push_back(tempVec2d);
+     
 }
 cout << "done init edge\n";
     for (auto& triangle: mesh.tvi) {
@@ -538,7 +538,7 @@ cout << "done init edge\n";
         if (!checkb) mesh.edge.at(i1).push_back(i3);
  
 
-        mesh.neibour.at(i1) << i2,i3;
+      
  
         checka =  false;checkb = false;
         for (int i =0; i < mesh.edge.at(i2).size ();i++) {
@@ -548,7 +548,7 @@ cout << "done init edge\n";
 
         if (!checka) mesh.edge.at(i2).push_back(i1);
         if (!checkb) mesh.edge.at(i2).push_back(i3);
-        mesh.neibour.at(i2) << i1,i3;
+         
 
         checka =  false;checkb = false;
         for (int i =0; i < mesh.edge.at(i3).size ();i++) {
@@ -558,7 +558,7 @@ cout << "done init edge\n";
 
         if (!checka) mesh.edge.at(i3).push_back(i1);
         if (!checkb) mesh.edge.at(i3).push_back(i2);
-        mesh.neibour.at(i3) << i1,i2; 
+       
     }
   
 
@@ -607,39 +607,7 @@ void getConstanceL(Vector3f A, double& l0, double& l1, double& l2, double& l3) {
     l2 = A(1) *  sqrt(( 3.0f) /(4*M_PI) );
     l3 =A(2) *  sqrt( (3.0f) /(4*M_PI) );
 }
-
-
-void writeParameterOptimization (vector <vector <float> > depthMap,vector <vector <int> > mapping2D3D,  cv::Mat image,vector <Vector2f>& textCoor, Mesh mesh) {
-    double l0,l1,l2,l3,A,B,_b, N;
-     uint8_t r,g,b,grey;
-    freopen ("parameters.txt","w",stdout);
-    for (int i =0; i < mesh.vertices.size (); i++) {
-        if (textCoor.at(i)(0)==-1) continue;
-        getConstanceL((mesh.vertices.at(i)),l0,l1,l2,l3);
-        N = mesh.eigeinValue.at(i);
-        int u = textCoor.at(i)(0);
-        int v = textCoor.at(i)(1);
-
-        int mapU1V = mapping2D3D[u+1][v];
-        int mapUV1 = mapping2D3D[u][v+1];
-
-        if (mapUV1==-1 || mapU1V==-1) continue;
-
-        float zU1V = mesh.vertices[mapU1V](2);
-        float zUV1 = mesh.vertices[mapUV1](2);
-
-        double I = getIntensity((int) r, (int )g, (int) b);
-
-        A = - (l1+l2)/N;
-        B = - ( I + l0 - ( l3-(l1*zU1V + l2*zUV1)/N  ));
-        _b = mesh.vertices.at(i)(2);
-
-        cout << A << " " << B << " " << _b  << endl;
-
-
-    }
-
-}
+ 
 
 void writeParameterOptimization ( Mesh mesh) {
     
@@ -652,16 +620,17 @@ void writeParameterOptimization ( Mesh mesh) {
         getConstanceL((mesh.vertices.at(i)),l0,l1,l2,l3);
  
 
-        cout << l0 << " " << l1 << " " << l2 << " " << l3 << " " << N << " " << mesh.normalVector.at(i).transpose() << endl;
- 
         r = mesh.colors.at(i)(0);
         g = mesh.colors.at(i)(1);
         b = mesh.colors.at(i)(2);
 
         N = mesh.eigeinValue.at(i);
-        cout << i << " " << l0 << " " << l1 << " " << l2 << " " <<l3 <<" " << " " << N << " " << mesh.edge.at(i).size() << endl; 
+ 
+
         if (N==0) continue;
         if (mesh.edge.at(i).size()<2) continue;
+
+         cout << i << " " << l0 << " " << l1 << " " << l2 << " " <<l3 <<" " << " " << N << endl; 
 
         int U1V = mesh.edge.at(i).at(0);
         int UV1 = mesh.edge.at(i).at(1);
@@ -677,7 +646,7 @@ void writeParameterOptimization ( Mesh mesh) {
         B = - ( I + l0 - ( l3-(l1*zU1V + l2*zUV1))/N  );
         _b = mesh.vertices.at(i)(2);
 
-       // cout << i << " " << A << " " << B << " " << _b  << endl;
+        cout << i << " " << A << " " << B << " " << _b  << endl;
     }
 
 }

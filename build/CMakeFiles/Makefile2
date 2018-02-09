@@ -54,10 +54,10 @@ RM = /usr/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/giang-rocker/AniAge/eosDetail
+CMAKE_SOURCE_DIR = /home/giang-rocker/AniAge/eos
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/giang-rocker/AniAge/eosDetail/build
+CMAKE_BINARY_DIR = /home/giang-rocker/AniAge/eos/build
 
 #=============================================================================
 # Target rules for target CMakeFiles/eos-headers.dir
@@ -66,14 +66,14 @@ CMAKE_BINARY_DIR = /home/giang-rocker/AniAge/eosDetail/build
 CMakeFiles/eos-headers.dir/all:
 	$(MAKE) -f CMakeFiles/eos-headers.dir/build.make CMakeFiles/eos-headers.dir/depend
 	$(MAKE) -f CMakeFiles/eos-headers.dir/build.make CMakeFiles/eos-headers.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/giang-rocker/AniAge/eosDetail/build/CMakeFiles --progress-num= "Built target eos-headers"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/giang-rocker/AniAge/eos/build/CMakeFiles --progress-num= "Built target eos-headers"
 .PHONY : CMakeFiles/eos-headers.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/eos-headers.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eosDetail/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eos/build/CMakeFiles 0
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/eos-headers.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eosDetail/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eos/build/CMakeFiles 0
 .PHONY : CMakeFiles/eos-headers.dir/rule
 
 # Convenience name for target.
@@ -122,7 +122,7 @@ examples/preinstall:
 examples/CMakeFiles/fit-model.dir/all:
 	$(MAKE) -f examples/CMakeFiles/fit-model.dir/build.make examples/CMakeFiles/fit-model.dir/depend
 	$(MAKE) -f examples/CMakeFiles/fit-model.dir/build.make examples/CMakeFiles/fit-model.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/giang-rocker/AniAge/eosDetail/build/CMakeFiles --progress-num=1,2 "Built target fit-model"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/giang-rocker/AniAge/eos/build/CMakeFiles --progress-num=1,2 "Built target fit-model"
 .PHONY : examples/CMakeFiles/fit-model.dir/all
 
 # Include target in all.
@@ -132,9 +132,9 @@ all: examples/CMakeFiles/fit-model.dir/all
 
 # Build rule for subdir invocation for target.
 examples/CMakeFiles/fit-model.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eosDetail/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eos/build/CMakeFiles 2
 	$(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/fit-model.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eosDetail/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eos/build/CMakeFiles 0
 .PHONY : examples/CMakeFiles/fit-model.dir/rule
 
 # Convenience name for target.
@@ -159,7 +159,7 @@ clean: examples/CMakeFiles/fit-model.dir/clean
 examples/CMakeFiles/fit-model-multi.dir/all:
 	$(MAKE) -f examples/CMakeFiles/fit-model-multi.dir/build.make examples/CMakeFiles/fit-model-multi.dir/depend
 	$(MAKE) -f examples/CMakeFiles/fit-model-multi.dir/build.make examples/CMakeFiles/fit-model-multi.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/giang-rocker/AniAge/eosDetail/build/CMakeFiles --progress-num=3,4 "Built target fit-model-multi"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/giang-rocker/AniAge/eos/build/CMakeFiles --progress-num=3,4 "Built target fit-model-multi"
 .PHONY : examples/CMakeFiles/fit-model-multi.dir/all
 
 # Include target in all.
@@ -169,9 +169,9 @@ all: examples/CMakeFiles/fit-model-multi.dir/all
 
 # Build rule for subdir invocation for target.
 examples/CMakeFiles/fit-model-multi.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eosDetail/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eos/build/CMakeFiles 2
 	$(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/fit-model-multi.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eosDetail/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eos/build/CMakeFiles 0
 .PHONY : examples/CMakeFiles/fit-model-multi.dir/rule
 
 # Convenience name for target.
@@ -196,7 +196,7 @@ clean: examples/CMakeFiles/fit-model-multi.dir/clean
 examples/CMakeFiles/generate-obj.dir/all:
 	$(MAKE) -f examples/CMakeFiles/generate-obj.dir/build.make examples/CMakeFiles/generate-obj.dir/depend
 	$(MAKE) -f examples/CMakeFiles/generate-obj.dir/build.make examples/CMakeFiles/generate-obj.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/giang-rocker/AniAge/eosDetail/build/CMakeFiles --progress-num=7,8 "Built target generate-obj"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/giang-rocker/AniAge/eos/build/CMakeFiles --progress-num=7,8 "Built target generate-obj"
 .PHONY : examples/CMakeFiles/generate-obj.dir/all
 
 # Include target in all.
@@ -206,9 +206,9 @@ all: examples/CMakeFiles/generate-obj.dir/all
 
 # Build rule for subdir invocation for target.
 examples/CMakeFiles/generate-obj.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eosDetail/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eos/build/CMakeFiles 2
 	$(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/generate-obj.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eosDetail/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eos/build/CMakeFiles 0
 .PHONY : examples/CMakeFiles/generate-obj.dir/rule
 
 # Convenience name for target.
@@ -233,7 +233,7 @@ clean: examples/CMakeFiles/generate-obj.dir/clean
 examples/CMakeFiles/fit-model-simple.dir/all:
 	$(MAKE) -f examples/CMakeFiles/fit-model-simple.dir/build.make examples/CMakeFiles/fit-model-simple.dir/depend
 	$(MAKE) -f examples/CMakeFiles/fit-model-simple.dir/build.make examples/CMakeFiles/fit-model-simple.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/giang-rocker/AniAge/eosDetail/build/CMakeFiles --progress-num=5,6 "Built target fit-model-simple"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/giang-rocker/AniAge/eos/build/CMakeFiles --progress-num=5,6 "Built target fit-model-simple"
 .PHONY : examples/CMakeFiles/fit-model-simple.dir/all
 
 # Include target in all.
@@ -243,9 +243,9 @@ all: examples/CMakeFiles/fit-model-simple.dir/all
 
 # Build rule for subdir invocation for target.
 examples/CMakeFiles/fit-model-simple.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eosDetail/build/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eos/build/CMakeFiles 2
 	$(MAKE) -f CMakeFiles/Makefile2 examples/CMakeFiles/fit-model-simple.dir/all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eosDetail/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/giang-rocker/AniAge/eos/build/CMakeFiles 0
 .PHONY : examples/CMakeFiles/fit-model-simple.dir/rule
 
 # Convenience name for target.

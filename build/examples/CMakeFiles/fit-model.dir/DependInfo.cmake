@@ -4,14 +4,13 @@ set(CMAKE_DEPENDS_LANGUAGES
   )
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
-  "/home/giang-rocker/AniAge/eosDetail/examples/fit-model.cpp" "/home/giang-rocker/AniAge/eosDetail/build/examples/CMakeFiles/fit-model.dir/fit-model.cpp.o"
+  "/home/giang-rocker/AniAge/eos/examples/fit-model.cpp" "/home/giang-rocker/AniAge/eos/build/examples/CMakeFiles/fit-model.dir/fit-model.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 
 # The include file search paths:
 set(CMAKE_CXX_TARGET_INCLUDE_PATH
-  "/home/giang-rocker/anaconda3/include"
-  "/home/giang-rocker/anaconda3/include/opencv"
+  "/usr/include/opencv"
   "../include"
   "../3rdparty/cereal/include"
   "../3rdparty/eigen"

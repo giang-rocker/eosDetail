@@ -517,10 +517,11 @@ void write3DTo2DMapping(vector <Vector2f>& textCoor, Mesh mesh, cv::Mat image) {
 }
 
 void getEdgeFromMesh ( Mesh& mesh  ) {
- 
+ tempVec2d << -1, -1;
 for (int i =0; i < mesh.vertices.size (); i++) {    
     vector <int> rowInt;
     mesh.edge.push_back(rowInt);
+    mesh.neibour.push_back(tempVec2d);
 }
 cout << "done init edge\n";
     for (auto& triangle: mesh.tvi) {
@@ -535,7 +536,10 @@ cout << "done init edge\n";
         }
         if (!checka) mesh.edge.at(i1).push_back(i2);
         if (!checkb) mesh.edge.at(i1).push_back(i3);
+ 
 
+        mesh.neibour.at(i1) << i2,i3;
+ 
         checka =  false;checkb = false;
         for (int i =0; i < mesh.edge.at(i2).size ();i++) {
             if (mesh.edge.at(i2)[i] ==i1 ) checka = true;
@@ -544,6 +548,7 @@ cout << "done init edge\n";
 
         if (!checka) mesh.edge.at(i2).push_back(i1);
         if (!checkb) mesh.edge.at(i2).push_back(i3);
+        mesh.neibour.at(i2) << i1,i3;
 
         checka =  false;checkb = false;
         for (int i =0; i < mesh.edge.at(i3).size ();i++) {
@@ -553,7 +558,7 @@ cout << "done init edge\n";
 
         if (!checka) mesh.edge.at(i3).push_back(i1);
         if (!checkb) mesh.edge.at(i3).push_back(i2);
-         
+        mesh.neibour.at(i3) << i1,i2; 
     }
   
 
@@ -645,18 +650,21 @@ void writeParameterOptimization ( Mesh mesh) {
     for (int i =0; i < mesh.vertices.size (); i++) {
 
         getConstanceL((mesh.vertices.at(i)),l0,l1,l2,l3);
+ 
 
         cout << l0 << " " << l1 << " " << l2 << " " << l3 << " " << N << " " << mesh.normalVector.at(i).transpose() << endl;
-        
+ 
         r = mesh.colors.at(i)(0);
         g = mesh.colors.at(i)(1);
         b = mesh.colors.at(i)(2);
 
         N = mesh.eigeinValue.at(i);
-         
+        cout << i << " " << l0 << " " << l1 << " " << l2 << " " <<l3 <<" " << " " << N << " " << mesh.edge.at(i).size() << endl; 
+        if (N==0) continue;
+        if (mesh.edge.at(i).size()<2) continue;
 
-        int U1V = mapping2D3D[u+1][v];
-        int UV1 = mapping2D3D[u][v+1];
+        int U1V = mesh.edge.at(i).at(0);
+        int UV1 = mesh.edge.at(i).at(1);
 
         if (U1V==-1 || UV1==-1) continue;
 
@@ -666,12 +674,10 @@ void writeParameterOptimization ( Mesh mesh) {
         double I = getIntensity((int) r, (int )g, (int) b);
 
         A = - (l1+l2)/N;
-        B = - ( I + l0 - ( l3-(l1*zU1V + l2*zUV1)/N  ));
+        B = - ( I + l0 - ( l3-(l1*zU1V + l2*zUV1))/N  );
         _b = mesh.vertices.at(i)(2);
 
-        cout << A << " " << B << " " << _b  << endl;
-
-
+       // cout << i << " " << A << " " << B << " " << _b  << endl;
     }
 
 }
@@ -980,7 +986,6 @@ int main(int argc, char* argv[])
     canculateNormalVector(resultMesh);
     core::write_obj(resultMesh, "checkkMesh.obj");
 
-   return 0;
     //write2DImangeZIntensity(depthMap,image,mapping2D3D,mesh);
     //write3DTo2DMapping(textCoor, mesh,image);
     writeParameterOptimization(resultMesh) ;

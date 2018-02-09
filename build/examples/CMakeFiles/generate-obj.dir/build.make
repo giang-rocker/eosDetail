@@ -43,10 +43,10 @@ RM = /usr/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/giang-rocker/AniAge/eosDetail
+CMAKE_SOURCE_DIR = /home/giang-rocker/AniAge/eos
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/giang-rocker/AniAge/eosDetail/build
+CMAKE_BINARY_DIR = /home/giang-rocker/AniAge/eos/build
 
 # Include any dependencies generated for this target.
 include examples/CMakeFiles/generate-obj.dir/depend.make
@@ -59,16 +59,16 @@ include examples/CMakeFiles/generate-obj.dir/flags.make
 
 examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o: examples/CMakeFiles/generate-obj.dir/flags.make
 examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o: ../examples/generate-obj.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/giang-rocker/AniAge/eosDetail/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o"
-	cd /home/giang-rocker/AniAge/eosDetail/build/examples && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/generate-obj.dir/generate-obj.cpp.o -c /home/giang-rocker/AniAge/eosDetail/examples/generate-obj.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/giang-rocker/AniAge/eos/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o"
+	cd /home/giang-rocker/AniAge/eos/build/examples && /usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/generate-obj.dir/generate-obj.cpp.o -c /home/giang-rocker/AniAge/eos/examples/generate-obj.cpp
 
 examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/generate-obj.dir/generate-obj.cpp.i"
-	cd /home/giang-rocker/AniAge/eosDetail/build/examples && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/giang-rocker/AniAge/eosDetail/examples/generate-obj.cpp > CMakeFiles/generate-obj.dir/generate-obj.cpp.i
+	cd /home/giang-rocker/AniAge/eos/build/examples && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/giang-rocker/AniAge/eos/examples/generate-obj.cpp > CMakeFiles/generate-obj.dir/generate-obj.cpp.i
 
 examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/generate-obj.dir/generate-obj.cpp.s"
-	cd /home/giang-rocker/AniAge/eosDetail/build/examples && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/giang-rocker/AniAge/eosDetail/examples/generate-obj.cpp -o CMakeFiles/generate-obj.dir/generate-obj.cpp.s
+	cd /home/giang-rocker/AniAge/eos/build/examples && /usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/giang-rocker/AniAge/eos/examples/generate-obj.cpp -o CMakeFiles/generate-obj.dir/generate-obj.cpp.s
 
 examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o.requires:
 
@@ -90,15 +90,18 @@ generate__obj_EXTERNAL_OBJECTS =
 
 examples/generate-obj: examples/CMakeFiles/generate-obj.dir/generate-obj.cpp.o
 examples/generate-obj: examples/CMakeFiles/generate-obj.dir/build.make
-examples/generate-obj: /home/giang-rocker/anaconda3/lib/libopencv_imgcodecs.so.3.2.0
+examples/generate-obj: /usr/lib/x86_64-linux-gnu/libopencv_calib3d.so.2.4.9
 examples/generate-obj: /usr/lib/x86_64-linux-gnu/libboost_system.so
 examples/generate-obj: /usr/lib/x86_64-linux-gnu/libboost_filesystem.so
 examples/generate-obj: /usr/lib/x86_64-linux-gnu/libboost_program_options.so
-examples/generate-obj: /home/giang-rocker/anaconda3/lib/libopencv_imgproc.so.3.2.0
-examples/generate-obj: /home/giang-rocker/anaconda3/lib/libopencv_core.so.3.2.0
+examples/generate-obj: /usr/lib/x86_64-linux-gnu/libopencv_features2d.so.2.4.9
+examples/generate-obj: /usr/lib/x86_64-linux-gnu/libopencv_highgui.so.2.4.9
+examples/generate-obj: /usr/lib/x86_64-linux-gnu/libopencv_imgproc.so.2.4.9
+examples/generate-obj: /usr/lib/x86_64-linux-gnu/libopencv_flann.so.2.4.9
+examples/generate-obj: /usr/lib/x86_64-linux-gnu/libopencv_core.so.2.4.9
 examples/generate-obj: examples/CMakeFiles/generate-obj.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/giang-rocker/AniAge/eosDetail/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable generate-obj"
-	cd /home/giang-rocker/AniAge/eosDetail/build/examples && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/generate-obj.dir/link.txt --verbose=$(VERBOSE)
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/giang-rocker/AniAge/eos/build/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Linking CXX executable generate-obj"
+	cd /home/giang-rocker/AniAge/eos/build/examples && $(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/generate-obj.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
 examples/CMakeFiles/generate-obj.dir/build: examples/generate-obj
@@ -110,10 +113,10 @@ examples/CMakeFiles/generate-obj.dir/requires: examples/CMakeFiles/generate-obj.
 .PHONY : examples/CMakeFiles/generate-obj.dir/requires
 
 examples/CMakeFiles/generate-obj.dir/clean:
-	cd /home/giang-rocker/AniAge/eosDetail/build/examples && $(CMAKE_COMMAND) -P CMakeFiles/generate-obj.dir/cmake_clean.cmake
+	cd /home/giang-rocker/AniAge/eos/build/examples && $(CMAKE_COMMAND) -P CMakeFiles/generate-obj.dir/cmake_clean.cmake
 .PHONY : examples/CMakeFiles/generate-obj.dir/clean
 
 examples/CMakeFiles/generate-obj.dir/depend:
-	cd /home/giang-rocker/AniAge/eosDetail/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/giang-rocker/AniAge/eosDetail /home/giang-rocker/AniAge/eosDetail/examples /home/giang-rocker/AniAge/eosDetail/build /home/giang-rocker/AniAge/eosDetail/build/examples /home/giang-rocker/AniAge/eosDetail/build/examples/CMakeFiles/generate-obj.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/giang-rocker/AniAge/eos/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/giang-rocker/AniAge/eos /home/giang-rocker/AniAge/eos/examples /home/giang-rocker/AniAge/eos/build /home/giang-rocker/AniAge/eos/build/examples /home/giang-rocker/AniAge/eos/build/examples/CMakeFiles/generate-obj.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : examples/CMakeFiles/generate-obj.dir/depend
 

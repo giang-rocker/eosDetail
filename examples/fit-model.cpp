@@ -516,11 +516,11 @@ void write3DTo2DMapping(vector <Vector2f>& textCoor, Mesh mesh, cv::Mat image) {
 
 }
 
-void getEdgeFromMesh ( Mesh mesh, vector <vector <int>>& edge ) {
+void getEdgeFromMesh ( Mesh& mesh  ) {
  
 for (int i =0; i < mesh.vertices.size (); i++) {    
     vector <int> rowInt;
-    edge.push_back(rowInt);
+    mesh.edge.push_back(rowInt);
 }
 cout << "done init edge\n";
     for (auto& triangle: mesh.tvi) {
@@ -530,29 +530,29 @@ cout << "done init edge\n";
         
         bool checka =  false,checkb = false;
         for (int i =0; i < edge.at(i1).size ();i++) {
-            if (edge.at(i1)[i] ==i2 ) checka = true;
-            if (edge.at(i1)[i] ==i3 ) checkb = true;
+            if (mesh.edge.at(i1)[i] ==i2 ) checka = true;
+            if (mesh.edge.at(i1)[i] ==i3 ) checkb = true;
         }
         if (!checka) edge.at(i1).push_back(i2);
         if (!checkb) edge.at(i1).push_back(i3);
 
         checka =  false;checkb = false;
         for (int i =0; i < edge.at(i2).size ();i++) {
-            if (edge.at(i2)[i] ==i1 ) checka = true;
-            if (edge.at(i2)[i] ==i3 ) checkb = true;
+            if (mesh.edge.at(i2)[i] ==i1 ) checka = true;
+            if (mesh.edge.at(i2)[i] ==i3 ) checkb = true;
         }
 
-        if (!checka) edge.at(i2).push_back(i1);
-        if (!checkb) edge.at(i2).push_back(i3);
+        if (!checka) mesh.edge.at(i2).push_back(i1);
+        if (!checkb) mesh.edge.at(i2).push_back(i3);
 
         checka =  false;checkb = false;
         for (int i =0; i < edge.at(i3).size ();i++) {
-            if (edge.at(i3)[i] ==i1 ) checka = true;
-            if (edge.at(i3)[i] ==i2 ) checkb = true;
+            if (mesh.edge.at(i3)[i] ==i1 ) checka = true;
+            if (mesh.edge.at(i3)[i] ==i2 ) checkb = true;
         }
 
-        if (!checka) edge.at(i3).push_back(i1);
-        if (!checkb) edge.at(i3).push_back(i2);
+        if (!checka) mesh.edge.at(i3).push_back(i1);
+        if (!checkb) mesh.edge.at(i3).push_back(i2);
          
     }
   
@@ -562,8 +562,8 @@ cout << "done init edge\n";
 
 void canculateNormalVector (Mesh& mesh ) {
 
- vector <vector <int> > edge;
- getEdgeFromMesh(mesh, edge);
+ 
+ getEdgeFromMesh(mesh );
  cout << "done get edge\n";
  MatrixXf A;
  MatrixXf ATA;
@@ -573,11 +573,11 @@ int numOfPoint = mesh.vertices.size ();
 // calculate normalvector of each vertex
     for (int i =0; i < numOfPoint; i ++) {
 
-      A = MatrixXf::Zero( edge.at(i).size() , 3);
+      A = MatrixXf::Zero( mesh.edge.at(i).size() , 3);
         
-        for (int j = 0; j < edge.at(i).size (); j++) {
+        for (int j = 0; j < mesh.edge.at(i).size (); j++) {
             RowVector3f rowVec ;
-            rowVec = RowVectorXf( mesh.vertices[edge.at(i).at(j)] - mesh.vertices[i]  );
+            rowVec = RowVectorXf( mesh.vertices[mesh.edge.at(i).at(j)] - mesh.vertices[i]  );
             A.row(j) = rowVec;
         }
         
@@ -639,24 +639,27 @@ void writeParameterOptimization (vector <vector <float> > depthMap,vector <vecto
 void writeParameterOptimization ( Mesh mesh) {
     
     double l0,l1,l2,l3,A,B,_b, N;
-    uint8_t r,g,b,grey;
+    int r,g,b,grey;
     freopen ("parameters.txt","w",stdout);
 
     for (int i =0; i < mesh.vertices.size (); i++) {
 
         getConstanceL((mesh.vertices.at(i)),l0,l1,l2,l3);
         
+        r = mesh.colors.at(i)(0);
+        g = mesh.colors.at(i)(1);
+        b = mesh.colors.at(i)(2);
+
         N = mesh.eigeinValue.at(i);
-        int u = textCoor.at(i)(0);
-        int v = textCoor.at(i)(1);
+         
 
-        int mapU1V = mapping2D3D[u+1][v];
-        int mapUV1 = mapping2D3D[u][v+1];
+        int U1V = mapping2D3D[u+1][v];
+        int UV1 = mapping2D3D[u][v+1];
 
-        if (mapUV1==-1 || mapU1V==-1) continue;
+        if (U1V==-1 || UV1==-1) continue;
 
-        float zU1V = mesh.vertices[mapU1V](2);
-        float zUV1 = mesh.vertices[mapUV1](2);
+        float zU1V = mesh.vertices[U1V](2);
+        float zUV1 = mesh.vertices[UV1](2);
 
         double I = getIntensity((int) r, (int )g, (int) b);
 

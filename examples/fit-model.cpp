@@ -529,15 +529,15 @@ cout << "done init edge\n";
         int i3 = triangle[2];
         
         bool checka =  false,checkb = false;
-        for (int i =0; i < edge.at(i1).size ();i++) {
+        for (int i =0; i < mesh.edge.at(i1).size ();i++) {
             if (mesh.edge.at(i1)[i] ==i2 ) checka = true;
             if (mesh.edge.at(i1)[i] ==i3 ) checkb = true;
         }
-        if (!checka) edge.at(i1).push_back(i2);
-        if (!checkb) edge.at(i1).push_back(i3);
+        if (!checka) mesh.edge.at(i1).push_back(i2);
+        if (!checkb) mesh.edge.at(i1).push_back(i3);
 
         checka =  false;checkb = false;
-        for (int i =0; i < edge.at(i2).size ();i++) {
+        for (int i =0; i < mesh.edge.at(i2).size ();i++) {
             if (mesh.edge.at(i2)[i] ==i1 ) checka = true;
             if (mesh.edge.at(i2)[i] ==i3 ) checkb = true;
         }
@@ -546,7 +546,7 @@ cout << "done init edge\n";
         if (!checkb) mesh.edge.at(i2).push_back(i3);
 
         checka =  false;checkb = false;
-        for (int i =0; i < edge.at(i3).size ();i++) {
+        for (int i =0; i < mesh.edge.at(i3).size ();i++) {
             if (mesh.edge.at(i3)[i] ==i1 ) checka = true;
             if (mesh.edge.at(i3)[i] ==i2 ) checkb = true;
         }
@@ -645,6 +645,8 @@ void writeParameterOptimization ( Mesh mesh) {
     for (int i =0; i < mesh.vertices.size (); i++) {
 
         getConstanceL((mesh.vertices.at(i)),l0,l1,l2,l3);
+
+        cout << l0 << " " << l1 << " " << l2 << " " << l3 << " " << N << " " << mesh.normalVector.at(i).transpose() << endl;
         
         r = mesh.colors.at(i)(0);
         g = mesh.colors.at(i)(1);

@@ -43,10 +43,10 @@ RM = /usr/local/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/giang-rocker/AniAge/eosDetail
+CMAKE_SOURCE_DIR = /home/giang-rocker/AniAge/eos
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/giang-rocker/AniAge/eosDetail/build
+CMAKE_BINARY_DIR = /home/giang-rocker/AniAge/eos/build
 
 # Utility rule file for eos-headers.
 
@@ -67,6 +67,6 @@ CMakeFiles/eos-headers.dir/clean:
 .PHONY : CMakeFiles/eos-headers.dir/clean
 
 CMakeFiles/eos-headers.dir/depend:
-	cd /home/giang-rocker/AniAge/eosDetail/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/giang-rocker/AniAge/eosDetail /home/giang-rocker/AniAge/eosDetail /home/giang-rocker/AniAge/eosDetail/build /home/giang-rocker/AniAge/eosDetail/build /home/giang-rocker/AniAge/eosDetail/build/CMakeFiles/eos-headers.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/giang-rocker/AniAge/eos/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/giang-rocker/AniAge/eos /home/giang-rocker/AniAge/eos /home/giang-rocker/AniAge/eos/build /home/giang-rocker/AniAge/eos/build /home/giang-rocker/AniAge/eos/build/CMakeFiles/eos-headers.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/eos-headers.dir/depend
 

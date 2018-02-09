@@ -58,7 +58,8 @@ struct Mesh
     std::vector<std::array<int, 3>> tci;    ///< Triangle color indices
     std::vector<Eigen::Vector3f> normalVector; // normal vector of vertex
     std::vector<float> eigeinValue; // eigeinValue of normal vector of vertex
-     vector <vector <int> > edge;
+    vector <vector <int> > edge;
+    vector <Eigen::Vector2d> neibour;
 
 };
 

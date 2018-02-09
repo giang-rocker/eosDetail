@@ -635,7 +635,41 @@ void writeParameterOptimization (vector <vector <float> > depthMap,vector <vecto
     }
 
 }
- 
+
+void writeParameterOptimization ( Mesh mesh) {
+    
+    double l0,l1,l2,l3,A,B,_b, N;
+    uint8_t r,g,b,grey;
+    freopen ("parameters.txt","w",stdout);
+
+    for (int i =0; i < mesh.vertices.size (); i++) {
+
+        getConstanceL((mesh.vertices.at(i)),l0,l1,l2,l3);
+        
+        N = mesh.eigeinValue.at(i);
+        int u = textCoor.at(i)(0);
+        int v = textCoor.at(i)(1);
+
+        int mapU1V = mapping2D3D[u+1][v];
+        int mapUV1 = mapping2D3D[u][v+1];
+
+        if (mapUV1==-1 || mapU1V==-1) continue;
+
+        float zU1V = mesh.vertices[mapU1V](2);
+        float zUV1 = mesh.vertices[mapUV1](2);
+
+        double I = getIntensity((int) r, (int )g, (int) b);
+
+        A = - (l1+l2)/N;
+        B = - ( I + l0 - ( l3-(l1*zU1V + l2*zUV1)/N  ));
+        _b = mesh.vertices.at(i)(2);
+
+        cout << A << " " << B << " " << _b  << endl;
+
+
+    }
+
+}
 
 int main(int argc, char* argv[])
 {
@@ -931,7 +965,7 @@ int main(int argc, char* argv[])
 
     for (int i =0; i < 179007; i++) {
         cin >> t1 >> t1 >> t2 >> t3;
-        std::array<int, 3> x{ t1-1,t2-1, t3-1 };
+        std::array<int, 3> x{ t1,t2, t3 };
         resultMesh.tvi.push_back(x);
     }
 
@@ -941,14 +975,13 @@ int main(int argc, char* argv[])
     canculateNormalVector(resultMesh);
     core::write_obj(resultMesh, "checkkMesh.obj");
 
+   return 0;
+    //write2DImangeZIntensity(depthMap,image,mapping2D3D,mesh);
+    //write3DTo2DMapping(textCoor, mesh,image);
+    writeParameterOptimization(resultMesh) ;
+
+    
     return 0;
-    
-
-    write2DImangeZIntensity(depthMap,image,mapping2D3D,mesh);
-    write3DTo2DMapping(textCoor, mesh,image);
-    writeParameterOptimization(depthMap,mapping2D3D, image,textCoor, mesh) ;
-
-    
    
     fs::path outputfile = outputbasename + ".png";
     cv::imwrite(outputfile.string(), outimg);

@@ -570,7 +570,6 @@ int count = 0;
 
 void canculateNormalVector (Mesh& mesh ) {
 
- 
  getEdgeFromMesh(mesh );
  cout << "done get edge\n";
  MatrixXf A;
@@ -596,7 +595,7 @@ int numOfPoint = mesh.vertices.size ();
         singularValues =  svd.singularValues() ;
         U = svd.matrixU();
         mesh.normalVector.push_back(VectorXf(U.col(2)));
-        mesh.eigeinValue.push_back(fabs(singularValues(2)));
+        mesh.eigeinValue.push_back(fabs(singularValues(1)));
         
     }
 cout << "done calculate noralVec\n";
@@ -633,9 +632,8 @@ void writeParameterOptimization ( Mesh mesh) {
         if (N==0) continue;
         if (mesh.edge.at(i).size()<2) continue;
 
-        //cout << i << " " << l0 << " " << l1 << " " << l2 << " " <<l3 <<" " << " " << N << "  " << mesh.edge.at(i).size()  << endl; 
-
-        continue ;
+        cout << i << " " << l0 << " " << l1 << " " << l2 << " " <<l3 <<" " << " " << N << "  " << mesh.edge.at(i).size()  << endl; 
+        cout << i << " " << mesh.normalVector.at(i)(0) << " " << mesh.normalVector.at(i)(1) << " " << mesh.normalVector.at(i)(2)  << endl;
         int U1V = mesh.edge.at(i).at(0);
         int UV1 = mesh.edge.at(i).at(1);
 
@@ -650,7 +648,7 @@ void writeParameterOptimization ( Mesh mesh) {
         B = - ( I + l0 - ( l3-(l1*zU1V + l2*zUV1))/N  );
         _b = mesh.vertices.at(i)(2);
 
-        cout << " " << A << " " << B << " " << _b  << endl;
+        cout << i << " " << A << " " << B << " " << _b  << endl;
     }
 
 }

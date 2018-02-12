@@ -952,22 +952,22 @@ int main(int argc, char* argv[])
     cin >> buff;
     int numOfPoint, numOfTriangle;
     int x;
-    cin >> numOfPoint >> numOfTriangle >> x;
+    scanf ("%d %d %d\n", &numOfPoint, &numOfTriangle, &x);
     int t1,t2,t3;
     float f1,f2,f3,f4;
     
     for (int i =0; i  < numOfPoint; i++) {
-        cin >> f1, f2,f3;
-        tempVec3f << f1, f2, f3;
+        scanf ("%d %d %f ", &t1, &t2, &f3);
+        tempVec3f << t1*1.0f, t2*1.0f, f3;
         resultMesh.vertices.push_back(tempVec3f);
-        cin >> f1, f2,f3;
-        tempVec3f << f1, f2, f3;
+        scanf ("%d %d %d ", &t1, &t2, &t3);
+        tempVec3f << t1*1.0f, t2*1.0f, t3*1.0f;
         resultMesh.colors.push_back(tempVec3f);
-        cin >> f3;
+        scanf ("%d\n",&t1);
     }
 
     for (int i =0; i < numOfTriangle; i++) {
-        cin >> t1 >> t1 >> t2 >> t3;
+        scanf ("%d %d %d %d\n",&t1, &t1, &t2, &t3);
         std::array<int, 3> x{ t1,t2, t3 };
         resultMesh.tvi.push_back(x);
         cout << resultMesh.tvi.at(i)[0] <<" "<< resultMesh.tvi.at(i)[2] <<" "<< resultMesh.tvi.at(i)[3]  << endl;

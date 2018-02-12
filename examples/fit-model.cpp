@@ -518,11 +518,11 @@ void write3DTo2DMapping(vector <Vector2f>& textCoor, Mesh mesh, cv::Mat image) {
 
 void getEdgeFromMesh ( Mesh& mesh  ) {
 tempVec2d << -1, -1;
-vector <bool> checkVertice;
+ 
 for (int i =0; i < mesh.vertices.size (); i++) {    
     vector <int> rowInt;
     mesh.edge.push_back(rowInt);
-    checkVertice.push_back(false);     
+      
 }
 cout << "done init edge\n";
 
@@ -532,9 +532,6 @@ int count = 0;
         int i2 = triangle[1];
         int i3 = triangle[2];
 
-        if (!checkVertice[i1]) { checkVertice[i1] = true; count ++; }
-        if (!checkVertice[i2]) { checkVertice[i2] = true; count ++; }
-        if (!checkVertice[i3]) { checkVertice[i3] = true; count ++; }
         
         bool checka =  false,checkb = false;
         for (int i =0; i < mesh.edge.at(i1).size ();i++) {
@@ -567,8 +564,7 @@ int count = 0;
         if (!checkb) mesh.edge.at(i3).push_back(i2);
        
     }
-  
-cout <<"check vertice: " << count  << endl;
+   
 
 }
 
@@ -634,10 +630,10 @@ void writeParameterOptimization ( Mesh mesh) {
         N = mesh.eigeinValue.at(i);
  
 
-        //if (N==0) continue;
-        //if (mesh.edge.at(i).size()<2) continue;
+        if (N==0) continue;
+        if (mesh.edge.at(i).size()<2) continue;
 
-        cout << i << " " << l0 << " " << l1 << " " << l2 << " " <<l3 <<" " << " " << N << "  " << mesh.edge.at(i).size()  << endl; 
+        //cout << i << " " << l0 << " " << l1 << " " << l2 << " " <<l3 <<" " << " " << N << "  " << mesh.edge.at(i).size()  << endl; 
 
         continue ;
         int U1V = mesh.edge.at(i).at(0);
@@ -654,7 +650,7 @@ void writeParameterOptimization ( Mesh mesh) {
         B = - ( I + l0 - ( l3-(l1*zU1V + l2*zUV1))/N  );
         _b = mesh.vertices.at(i)(2);
 
-        cout << i << " " << A << " " << B << " " << _b  << endl;
+        cout << " " << A << " " << B << " " << _b  << endl;
     }
 
 }
@@ -946,7 +942,6 @@ int main(int argc, char* argv[])
 
     cout << count << endl;
      Mesh resultMesh;
-     freopen("checkTriange.txt","w",stdout);
     freopen("019Mesh.off","r",stdin);
     char buff [1024];
     cin >> buff;
@@ -970,7 +965,6 @@ int main(int argc, char* argv[])
         scanf ("%d %d %d %d\n",&t1, &t1, &t2, &t3);
         std::array<int, 3> x{ t1,t2, t3 };
         resultMesh.tvi.push_back(x);
-        cout << resultMesh.tvi.at(i)[0] <<" "<< resultMesh.tvi.at(i)[2] <<" "<< resultMesh.tvi.at(i)[3]  << endl;
     }
 
     cout << "size of triangle :" ;

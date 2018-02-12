@@ -179005,4 +179005,7 @@
 555198 555196 556519
 556519 555196 552498
 555196 555198 552498
-size of triangle :179007
+179007
+done init edge
+done get edge
+done calculate noralVec

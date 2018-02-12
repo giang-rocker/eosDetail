@@ -517,17 +517,24 @@ void write3DTo2DMapping(vector <Vector2f>& textCoor, Mesh mesh, cv::Mat image) {
 }
 
 void getEdgeFromMesh ( Mesh& mesh  ) {
- tempVec2d << -1, -1;
+tempVec2d << -1, -1;
+vector <bool> checkVertice;
 for (int i =0; i < mesh.vertices.size (); i++) {    
     vector <int> rowInt;
     mesh.edge.push_back(rowInt);
-     
+    checkVertice.push_back(false);     
 }
 cout << "done init edge\n";
+
+int count = 0;
     for (auto& triangle: mesh.tvi) {
         int i1 = triangle[0];
         int i2 = triangle[1];
         int i3 = triangle[2];
+
+        if (!checkVertice[i1]) { checkVertice[i1] = true; count ++; }
+        if (!checkVertice[i2]) { checkVertice[i2] = true; count ++; }
+        if (!checkVertice[i3]) { checkVertice[i3] = true; count ++; }
         
         bool checka =  false,checkb = false;
         for (int i =0; i < mesh.edge.at(i1).size ();i++) {
@@ -561,7 +568,7 @@ cout << "done init edge\n";
        
     }
   
-
+cout <<"check vertice: " << count  << endl;
 
 }
 
@@ -627,11 +634,12 @@ void writeParameterOptimization ( Mesh mesh) {
         N = mesh.eigeinValue.at(i);
  
 
-        if (N==0) continue;
-        if (mesh.edge.at(i).size()<2) continue;
+        //if (N==0) continue;
+        //if (mesh.edge.at(i).size()<2) continue;
 
-         cout << i << " " << l0 << " " << l1 << " " << l2 << " " <<l3 <<" " << " " << N << endl; 
+        cout << i << " " << l0 << " " << l1 << " " << l2 << " " <<l3 <<" " << " " << N << "  " << mesh.edge.at(i).size()  << endl; 
 
+        continue ;
         int U1V = mesh.edge.at(i).at(0);
         int UV1 = mesh.edge.at(i).at(1);
 
@@ -819,6 +827,7 @@ int main(int argc, char* argv[])
     */
     
 
+
     const int imgw = image.cols;
     const int imgh = image.rows;
     uint8_t r,g,b;  
@@ -849,15 +858,15 @@ int main(int argc, char* argv[])
     vector<Vector3f> _2DimageRealZ ;
     get2DimageZ(mesh,_2DimageZ,mappingTriangle,_2DimageRealZ );
 
-   Vector3f A,B,C,D;
-   A << _2DimageZ.at(0)(0),_2DimageZ.at(0)(1), (1.0f);
-   C << _2DimageZ.at(0)(2),_2DimageZ.at(0)(3),_2DimageZ.at(0)(4);
-   B << _2DimageZ.at(imgw-1)(0),_2DimageZ.at(imgw-1)(1), (1.0f);
-   D << _2DimageZ.at(imgw-1)(2),_2DimageZ.at(imgw-1)(3),_2DimageZ.at(imgw-1)(4);
+    Vector3f A,B,C,D;
+    A << _2DimageZ.at(0)(0),_2DimageZ.at(0)(1), (1.0f);
+    C << _2DimageZ.at(0)(2),_2DimageZ.at(0)(3),_2DimageZ.at(0)(4);
+    B << _2DimageZ.at(imgw-1)(0),_2DimageZ.at(imgw-1)(1), (1.0f);
+    D << _2DimageZ.at(imgw-1)(2),_2DimageZ.at(imgw-1)(3),_2DimageZ.at(imgw-1)(4);
 
 
-   float scale = 2*getLen(A,B) / getLen(C,D);
-   cout << "scale: " << scale << endl;
+    float scale = 2*getLen(A,B) / getLen(C,D);
+    cout << "scale: " << scale << endl;
     
     /*
     // WRITE 2D IMAGE & IMAGE PLAN
@@ -914,11 +923,10 @@ int main(int argc, char* argv[])
                            fitting::get_opencv_viewport(image.cols, image.rows), mapping2D3D,currentLen );
     
     vector < Vector3f > pointCloud;
-     Mesh resultMesh;
-
- //   freopen ("depthmap.off","w",stdout);
-  //  cout << "COFF\n";
-  //   cout << (_2DimageRealZ.size ()) << " 0 0" << endl;
+  
+    freopen ("depthmap.off","w",stdout);
+    cout << "COFF\n";
+     cout << (_2DimageRealZ.size ()) << " 0 0" << endl;
     for (int i =0; i < imgw; i++) {
         for (int  j =0 ; j < imgh; j++){
         b=image.at<cv::Vec3b>(j,i)[0];//R
@@ -929,29 +937,47 @@ int main(int argc, char* argv[])
         if ( depthMap[i][j]!=-9999  )
         {       
                 tempVec3f << i ,j, depthMap[i][j];
-                resultMesh.vertices.push_back(tempVec3f);
                 tempVec3f << (int)r , (int)g, (int)b;
-                resultMesh.colors.push_back(tempVec3f);
-     //           cout << (i) <<" " << (j) << " " << (depthMap[i][j]) <<  " "  << (int) r << " "  << (int) g << " " << (int) b << " 1"   <<endl ;
+                cout << (i) <<" " << (j) << " " << (depthMap[i][j]) <<  " "  << (int) r << " "  << (int) g << " " << (int) b << " 1"   <<endl ;
                 count ++;
         }
         } // 2nd for    
     } //1st for
 
     cout << count << endl;
-   
-    freopen("triangle019.txt","r",stdin);
+     Mesh resultMesh;
+     freopen("checkTriange.txt","w",stdout);
+    freopen("019Mesh.off","r",stdin);
+    char buff [1024];
+    cin >> buff;
+    int numOfPoint, numOfTriangle;
+    int x;
+    cin >> numOfPoint >> numOfTriangle >> x;
     int t1,t2,t3;
+    float f1,f2,f3,f4;
+    
+    for (int i =0; i  < numOfPoint; i++) {
+        cin >> f1, f2,f3;
+        tempVec3f << f1, f2, f3;
+        resultMesh.vertices.push_back(tempVec3f);
+        cin >> f1, f2,f3;
+        tempVec3f << f1, f2, f3;
+        resultMesh.colors.push_back(tempVec3f);
+        cin >> f3;
+    }
 
-    for (int i =0; i < 179007; i++) {
+    for (int i =0; i < numOfTriangle; i++) {
         cin >> t1 >> t1 >> t2 >> t3;
         std::array<int, 3> x{ t1,t2, t3 };
         resultMesh.tvi.push_back(x);
+        cout << resultMesh.tvi.at(i)[0] <<" "<< resultMesh.tvi.at(i)[2] <<" "<< resultMesh.tvi.at(i)[3]  << endl;
     }
 
     cout << "size of triangle :" ;
     cout << resultMesh.tvi.size () << endl;
-        cout << "start calculate normal vector"<< endl;
+    cout << "size of vertiese :" ;
+    cout << resultMesh.vertices.size () << endl;
+    cout << "start calculate normal vector"<< endl;
     canculateNormalVector(resultMesh);
     core::write_obj(resultMesh, "checkkMesh.obj");
 

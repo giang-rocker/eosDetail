@@ -111,7 +111,7 @@ inline void mapping(cv::Mat image, const core::Mesh& mesh, glm::mat4x4 modelview
  
 };
 
-inline void add_depth_information(cv::Mat image, const core::Mesh mesh, glm::mat4x4 modelview,
+inline void add_depth_information(const core::Mesh mesh, glm::mat4x4 modelview,
                            glm::mat4x4 projection, glm::vec4 viewport,
                            vector <vector <float > >& depthMap, 
                            vector <Vector2f>  & textCoor,
@@ -120,7 +120,7 @@ inline void add_depth_information(cv::Mat image, const core::Mesh mesh, glm::mat
 {
 
 
-    float scale = 10.0f;// _scale;
+    float scale = _scale;// _scale;
  
     for (const auto& triangle : mesh.tvi)
     {
@@ -136,12 +136,9 @@ inline void add_depth_information(cv::Mat image, const core::Mesh mesh, glm::mat
 
        
 
-        if (render::detail::are_vertices_ccw_in_screen_space(glm::vec2(p1), glm::vec2(p2), glm::vec2(p3)))
+    //    if (render::detail::are_vertices_ccw_in_screen_space(glm::vec2(p1), glm::vec2(p2), glm::vec2(p3)))
         {
-            cv::line(image, cv::Point(p1.x, p1.y), cv::Point(p2.x, p2.y), color);
-            cv::line(image, cv::Point(p2.x, p2.y), cv::Point(p3.x, p3.y), color);
-            cv::line(image, cv::Point(p3.x, p3.y), cv::Point(p1.x, p1.y), color);
-
+         
             float p1z = p1.z * scale; float p2z = p2.z * scale;float p3z = p3.z* scale;
          
             depthMap[(int)p1.x][(int)p1.y] =  p1z ;
@@ -173,8 +170,8 @@ inline void add_depth_information(cv::Mat image, const core::Mesh mesh, glm::mat
            // cout << "done here" << endl;
            // cout << c << endl;
             if (c!=0)
-            for (int i = minX; i <=  maxX; i++)
-                for (int j =minY; j <= maxY; j++) {
+            for (int i = minX; i <=  maxX; i+=4)
+                for (int j =minY; j <= maxY; j+=4) {
                     M << i , j;
                     if (insideABC(A1,B1,C1,M))
                     depthMap[i ][j ] =   -(d+a*(i ) + b*(j ))/c ;

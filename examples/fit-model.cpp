@@ -698,6 +698,9 @@ int main(int argc, char* argv[])
 
     // Load the image, landmarks, LandmarkMapper and the Morphable Model:
     Mat image = cv::imread(imagefile);
+  
+  //  cv::resize(image, image, cv::Size(), 0.5, 0.5);
+
     LandmarkCollection<Eigen::Vector2f> landmarks;
     try
     {
@@ -910,10 +913,10 @@ int main(int argc, char* argv[])
     int count = 0;
     
     // get depth & get mapping 3D to 2D
-    render::add_depth_information(outimg, mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
-                           fitting::get_opencv_viewport(image.cols, image.rows),depthMap,textCoor, scale);
+    render::add_depth_information( mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
+                           fitting::get_opencv_viewport(image.cols, image.rows),depthMap,textCoor, (int)scale/2*2);
     // get mapping 2D to 3D index
-    render::getMapping2D3DBy2D(outimg, mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
+    render::getMapping2D3DBy2D(outimg,mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
                            fitting::get_opencv_viewport(image.cols, image.rows), mapping2D3D,currentLen );
     
     vector < Vector3f > pointCloud;
@@ -921,7 +924,8 @@ int main(int argc, char* argv[])
     freopen ("depthmap.off","w",stdout);
     cout << "COFF\n";
      cout << (_2DimageRealZ.size ()) << " 0 0" << endl;
-    for (int i =0; i < imgw; i++) {
+
+      for (int i =0; i < imgw; i++) {
         for (int  j =0 ; j < imgh; j++){
         b=image.at<cv::Vec3b>(j,i)[0];//R
         g=image.at<cv::Vec3b>(j,i)[1];//B

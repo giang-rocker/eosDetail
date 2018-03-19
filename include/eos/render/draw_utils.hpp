@@ -141,9 +141,9 @@ inline void add_depth_information(const core::Mesh mesh, glm::mat4x4 modelview,
          
             float p1z = p1.z * scale; float p2z = p2.z * scale;float p3z = p3.z* scale;
          
-            depthMap[(int)p1.x][(int)p1.y] =  p1z ;
-            depthMap[(int)p2.x][(int)p2.y] =  p2z ;
-            depthMap[(int)p3.x][(int)p3.y] =  p3z ;
+      //      depthMap[(int)p1.x][(int)p1.y] =  p1z ;
+       //     depthMap[(int)p2.x][(int)p2.y] =  p2z ;
+        //    depthMap[(int)p3.x][(int)p3.y] =  p3z ;
 
             textCoor.at(triangle[0])(0) = (int)p1.x;textCoor.at(triangle[0])(1) = (int)p1.y;
             textCoor.at(triangle[1])(0) = (int)p2.x;textCoor.at(triangle[1])(1) = (int)p2.y;
@@ -170,8 +170,8 @@ inline void add_depth_information(const core::Mesh mesh, glm::mat4x4 modelview,
            // cout << "done here" << endl;
            // cout << c << endl;
             if (c!=0)
-            for (int i = minX; i <=  maxX; i+=4)
-                for (int j =minY; j <= maxY; j+=4) {
+            for (int i = minX; i <=  maxX; i+=1)
+                for (int j =minY; j <= maxY; j+=1) {
                     M << i , j;
                     if (insideABC(A1,B1,C1,M))
                     depthMap[i ][j ] =   -(d+a*(i ) + b*(j ))/c ;

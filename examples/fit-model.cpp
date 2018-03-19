@@ -773,7 +773,10 @@ int main(int argc, char* argv[])
     // Draw the fitted mesh as wireframe, and save the image:
     render::draw_wireframe(outimg, mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
                          fitting::get_opencv_viewport(image.cols, image.rows));
-     /*
+    
+
+
+    /*
     cout << "XXX" << endl;
       int delta = 5;
 
@@ -862,7 +865,7 @@ int main(int argc, char* argv[])
     D << _2DimageZ.at(imgw-1)(2),_2DimageZ.at(imgw-1)(3),_2DimageZ.at(imgw-1)(4);
 
 
-    float scale = 2*getLen(A,B) / getLen(C,D);
+    float scale = getLen(A,B) / getLen(C,D);
     cout << "scale: " << scale << endl;
     
     /*
@@ -886,6 +889,7 @@ int main(int argc, char* argv[])
     */
 
     vector <vector <float> > depthMap;
+    vector <vector <int> > indexMap;
     vector <Vector2f> textCoor ;
     vector <vector <int> > mapping2D3D;
     vector <vector <double> > currentLen;
@@ -902,6 +906,7 @@ int main(int argc, char* argv[])
         depthMap.push_back(row);
         currentLen.push_back(rowDouble);
         mapping2D3D.push_back(rowInt);
+        indexMap.push_back(rowInt);
     }
 
     // init textCoor
@@ -912,20 +917,52 @@ int main(int argc, char* argv[])
 
     int count = 0;
     
+     
     // get depth & get mapping 3D to 2D
     render::add_depth_information( mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
-                           fitting::get_opencv_viewport(image.cols, image.rows),depthMap,textCoor, (int)scale/2*2);
+                           fitting::get_opencv_viewport(image.cols, image.rows),depthMap,textCoor,  scale);
     // get mapping 2D to 3D index
     render::getMapping2D3DBy2D(outimg,mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
                            fitting::get_opencv_viewport(image.cols, image.rows), mapping2D3D,currentLen );
     
     vector < Vector3f > pointCloud;
+    
+    
+   
+    int _index = 0 ;
+    vector <Vector3d> tvi;
+    int _scale  = 1;
+
+    // CREATE INDEX
+    for (int i =0; i < imgw; i++) {
+        for (int  j =0 ; j < imgh; j++){
+        
+
+        if ( depthMap[i][j]!=-9999  )
+        {       
+               indexMap[i][j] = _index++;
+               count++;
+
+               if ( indexMap[i][j-_scale] !=-1 && indexMap [i-_scale][j-_scale]!=-1 ) {
+            tempVec3d << indexMap[i][j], indexMap[i][j-_scale],indexMap [i-_scale][j-_scale]  ;
+            tvi.push_back(tempVec3d);
+        }
+
+        if ( indexMap[i-_scale][j-_scale] !=-1 && indexMap [i-_scale][j]!=-1 ) {
+            tempVec3d <<   indexMap [i-_scale][j],indexMap[i][j], indexMap[i-_scale][j-_scale];
+            tvi.push_back(tempVec3d);
+        }
+
+        } // if 99999
+        } // 2nd for    
+    } //1st for
+
   
     freopen ("depthmap.off","w",stdout);
     cout << "COFF\n";
-     cout << (_2DimageRealZ.size ()) << " 0 0" << endl;
+    cout << (count) << " " << tvi.size() << " 0" << endl;
 
-      for (int i =0; i < imgw; i++) {
+    for (int i =0; i < imgw; i++) {
         for (int  j =0 ; j < imgh; j++){
         b=image.at<cv::Vec3b>(j,i)[0];//R
         g=image.at<cv::Vec3b>(j,i)[1];//B
@@ -937,52 +974,21 @@ int main(int argc, char* argv[])
                 tempVec3f << i ,j, depthMap[i][j];
                 tempVec3f << (int)r , (int)g, (int)b;
                 cout << (i) <<" " << (j) << " " << (depthMap[i][j]) <<  " "  << (int) r << " "  << (int) g << " " << (int) b << " 1"   <<endl ;
-                count ++;
+             
+               
+
         }
         } // 2nd for    
     } //1st for
 
+    for (int i =0; i< tvi.size(); i++) {
+        cout << 3 << " " << tvi.at(i).transpose() << endl;
+    }
+
     cout << count << endl;
-     Mesh resultMesh;
-    freopen("019Mesh.off","r",stdin);
-    char buff [1024];
-    cin >> buff;
-    int numOfPoint, numOfTriangle;
-    int x;
-    scanf ("%d %d %d\n", &numOfPoint, &numOfTriangle, &x);
-    int t1,t2,t3;
-    float f1,f2,f3,f4;
-    
-    for (int i =0; i  < numOfPoint; i++) {
-        scanf ("%d %d %f ", &t1, &t2, &f3);
-        tempVec3f << t1*1.0f, t2*1.0f, f3;
-        resultMesh.vertices.push_back(tempVec3f);
-        scanf ("%d %d %d ", &t1, &t2, &t3);
-        tempVec3f << t1*1.0f, t2*1.0f, t3*1.0f;
-        resultMesh.colors.push_back(tempVec3f);
-        scanf ("%d\n",&t1);
-    }
-
-    for (int i =0; i < numOfTriangle; i++) {
-        scanf ("%d %d %d %d\n",&t1, &t1, &t2, &t3);
-        std::array<int, 3> x{ t1,t2, t3 };
-        resultMesh.tvi.push_back(x);
-    }
-
-    cout << "size of triangle :" ;
-    cout << resultMesh.tvi.size () << endl;
-    cout << "size of vertiese :" ;
-    cout << resultMesh.vertices.size () << endl;
-    cout << "start calculate normal vector"<< endl;
-    canculateNormalVector(resultMesh);
-    core::write_obj(resultMesh, "checkkMesh.obj");
-
-    //write2DImangeZIntensity(depthMap,image,mapping2D3D,mesh);
-    //write3DTo2DMapping(textCoor, mesh,image);
-    writeParameterOptimization(resultMesh) ;
-
-    
-    return 0;
+     cout << tvi.size() << endl;
+       
+   // return 0;
    
     fs::path outputfile = outputbasename + ".png";
     cv::imwrite(outputfile.string(), outimg);

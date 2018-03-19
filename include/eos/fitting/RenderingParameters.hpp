@@ -295,7 +295,31 @@ inline Eigen::Matrix<float, 3, 4> get_3x4_affine_camera_matrix(RenderingParamete
     full_projection_3x4(2, 2) = 0.0f;
     full_projection_3x4(2, 3) = 1.0f;
 
-    return full_projection_3x4;
+    return full_projection_3x4; 
+};
+
+inline Eigen::Matrix<float, 4, 4> get_4x4_affine_camera_matrix(RenderingParameters params, int width,
+                                                               int height)
+{
+    const auto view_model = to_eigen(params.get_modelview());
+    const auto ortho_projection = to_eigen(params.get_projection());
+    using MatrixXf3x4 = Eigen::Matrix<float, 3, 4>;
+    using Eigen::Matrix4f;
+    const Matrix4f mvp = ortho_projection * view_model;
+
+    glm::vec4 viewport(0, height, width, -height); // flips y, origin top-left, like in OpenCV
+    // equivalent to what glm::project's viewport does, but we don't change z and w:
+    Eigen::Matrix4f viewport_mat;
+    // clang-format off
+    viewport_mat << viewport[2] / 2.0f, 0.0f, 0.0f, viewport[2] / 2.0f + viewport[0],
+                    0.0f,               viewport[3] / 2.0f, 0.0f, viewport[3] / 2.0f + viewport[1], 
+                    0.0f,               0.0f, viewport[2] / 2.0f,  viewport[2] / 2.0f + viewport[0],
+                    0.0f,               0.0f,               0.0f, 1.0f;
+    // clang-format on
+
+    const Matrix4f full_projection_4x4 = viewport_mat * mvp;
+    
+    return full_projection_4x4;
 };
 
 } /* namespace fitting */

@@ -602,12 +602,13 @@ cout << "done calculate noralVec\n";
    
 }
 
-void getConstanceL(Vector3f A, double& l0, double& l1, double& l2, double& l3) {
+
+void getConstanceL( double& l0, double& l1, double& l2, double& l3) {
 
     l0 = sqrt ( 1.0f /(4*M_PI) );
-    l1 =A(0) * sqrt( ( 3.0f) /(4*M_PI) );
-    l2 = A(1) *  sqrt(( 3.0f) /(4*M_PI) );
-    l3 =A(2) *  sqrt( (3.0f) /(4*M_PI) );
+    l1 = sqrt( ( 3.0f) /(4*M_PI) );
+    l2 = sqrt(( 3.0f) /(4*M_PI) );
+    l3 = sqrt( (3.0f) /(4*M_PI) );
 }
  
 
@@ -616,11 +617,9 @@ void writeParameterOptimization ( Mesh mesh) {
     double l0,l1,l2,l3,A,B,_b, N;
     int r,g,b,grey;
     freopen ("parameters.txt","w",stdout);
-
-    for (int i =0; i < mesh.vertices.size (); i++) {
-
-        getConstanceL((mesh.vertices.at(i)),l0,l1,l2,l3);
+    getConstanceL(l0,l1,l2,l3);
  
+    for (int i =0; i < mesh.vertices.size (); i++) {
 
         r = mesh.colors.at(i)(0);
         g = mesh.colors.at(i)(1);
@@ -774,8 +773,9 @@ int main(int argc, char* argv[])
     render::draw_wireframe(outimg, mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
                          fitting::get_opencv_viewport(image.cols, image.rows));
     
-
-
+      cout <<"Matrix 3x4" << endl;
+    cout << affine_from_ortho << endl;
+   
     /*
     cout << "XXX" << endl;
       int delta = 5;
@@ -893,6 +893,7 @@ int main(int argc, char* argv[])
     vector <Vector2f> textCoor ;
     vector <vector <int> > mapping2D3D;
     vector <vector <double> > currentLen;
+    tempVec2d << -1,-1;
    
      for (int i =0; i < imgw; i++){
         vector <float> row;
@@ -907,12 +908,14 @@ int main(int argc, char* argv[])
         currentLen.push_back(rowDouble);
         mapping2D3D.push_back(rowInt);
         indexMap.push_back(rowInt);
+
     }
 
     // init textCoor
    tempVec2f << (-1.0f),(-1.0f);
    for (int i =0; i < mesh.vertices.size (); i++ ) {
         textCoor.push_back (tempVec2f);
+        mesh.neibour.push_back(tempVec2d);
    }
 
     int count = 0;
@@ -920,7 +923,7 @@ int main(int argc, char* argv[])
      
     // get depth & get mapping 3D to 2D
     render::add_depth_information( mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
-                           fitting::get_opencv_viewport(image.cols, image.rows),depthMap,textCoor,  scale);
+                           fitting::get_opencv_viewport(image.cols, image.rows),depthMap,textCoor,  8.0f );//2* (int) scale);
     // get mapping 2D to 3D index
     render::getMapping2D3DBy2D(outimg,mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
                            fitting::get_opencv_viewport(image.cols, image.rows), mapping2D3D,currentLen );
@@ -931,11 +934,11 @@ int main(int argc, char* argv[])
    
     int _index = 0 ;
     vector <Vector3d> tvi;
-    int _scale  = 1;
+    int _scale  = 5;
 
     // CREATE INDEX
-    for (int i =0; i < imgw; i++) {
-        for (int  j =0 ; j < imgh; j++){
+    for (int i =_scale; i < imgw; i+=_scale) {
+        for (int  j =_scale ; j < imgh; j+=_scale){
         
 
         if ( depthMap[i][j]!=-9999  )
@@ -943,15 +946,17 @@ int main(int argc, char* argv[])
                indexMap[i][j] = _index++;
                count++;
 
-               if ( indexMap[i][j-_scale] !=-1 && indexMap [i-_scale][j-_scale]!=-1 ) {
+            if ( indexMap[i][j-_scale] !=-1 && indexMap [i-_scale][j-_scale]!=-1 ) {
             tempVec3d << indexMap[i][j], indexMap[i][j-_scale],indexMap [i-_scale][j-_scale]  ;
             tvi.push_back(tempVec3d);
-        }
+            
+            }
 
-        if ( indexMap[i-_scale][j-_scale] !=-1 && indexMap [i-_scale][j]!=-1 ) {
+            if ( indexMap[i-_scale][j-_scale] !=-1 && indexMap [i-_scale][j]!=-1 ) {
             tempVec3d <<   indexMap [i-_scale][j],indexMap[i][j], indexMap[i-_scale][j-_scale];
             tvi.push_back(tempVec3d);
-        }
+           
+            }
 
         } // if 99999
         } // 2nd for    
@@ -962,21 +967,17 @@ int main(int argc, char* argv[])
     cout << "COFF\n";
     cout << (count) << " " << tvi.size() << " 0" << endl;
 
-    for (int i =0; i < imgw; i++) {
-        for (int  j =0 ; j < imgh; j++){
-        b=image.at<cv::Vec3b>(j,i)[0];//R
-        g=image.at<cv::Vec3b>(j,i)[1];//B
-        r=image.at<cv::Vec3b>(j,i)[2];//G
-
-
+    for (int i =0; i < imgw; i+=_scale) {
+        for (int  j =0 ; j < imgh; j+=_scale){
         if ( depthMap[i][j]!=-9999  )
         {       
+                b=image.at<cv::Vec3b>(j,i)[0];//R
+                g=image.at<cv::Vec3b>(j,i)[1];//B
+                r=image.at<cv::Vec3b>(j,i)[2];//G
                 tempVec3f << i ,j, depthMap[i][j];
                 tempVec3f << (int)r , (int)g, (int)b;
                 cout << (i) <<" " << (j) << " " << (depthMap[i][j]) <<  " "  << (int) r << " "  << (int) g << " " << (int) b << " 1"   <<endl ;
              
-               
-
         }
         } // 2nd for    
     } //1st for
@@ -1004,7 +1005,7 @@ int main(int argc, char* argv[])
    
 
  //   cout << "Finished fitting and wrote result mesh and isomap to files with basename "
-  //       << outputfile.stem().stem() << "." << endl;
+  //  cout<< outputfile.stem().stem() << "." << endl;
   
     return EXIT_SUCCESS;
 }

@@ -400,7 +400,7 @@ void get2DimageRealZ(Mesh mesh,vector <VectorXf>  _2DimageZ, vector<vector <int 
 }
 
 float getIntensity(int r, int g, int b) {
-    return 0.2126*r + 0.7152*g + 0.0722*b;
+    return (0.2126*r + 0.7152*g + 0.0722*b )/256;
 }
 
 void getRGB(vector <Vector2f> textCoor ,cv::Mat image, vector <Vector3d>& textColor, vector <int>& intent  ){
@@ -894,6 +894,7 @@ int main(int argc, char* argv[])
     vector <vector <int> > mapping2D3D;
     vector <vector <double> > currentLen;
     tempVec2d << -1,-1;
+    core::Mesh reconstructedMesh;
    
      for (int i =0; i < imgw; i++){
         vector <float> row;
@@ -916,7 +917,7 @@ int main(int argc, char* argv[])
    for (int i =0; i < mesh.vertices.size (); i++ ) {
         textCoor.push_back (tempVec2f);
         mesh.neibour.push_back(tempVec2d);
-   }
+    }
 
     int count = 0;
     
@@ -928,13 +929,11 @@ int main(int argc, char* argv[])
     render::getMapping2D3DBy2D(outimg,mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
                            fitting::get_opencv_viewport(image.cols, image.rows), mapping2D3D,currentLen );
     
-    vector < Vector3f > pointCloud;
-    
+     
     
    
     int _index = 0 ;
-    vector <Vector3d> tvi;
-    int _scale  = 5;
+     int _scale  = 5;
 
     // CREATE INDEX
     for (int i =_scale; i < imgw; i+=_scale) {
@@ -942,19 +941,23 @@ int main(int argc, char* argv[])
         
 
         if ( depthMap[i][j]!=-9999  )
-        {       
+        {      
+               tempVec3f << i,j,depthMap[i][j];
+               reconstructedMesh.vertices.push_back(tempVec3f);
                indexMap[i][j] = _index++;
                count++;
+               reconstructedMesh.neibour.push_back(tempVec2d);
 
             if ( indexMap[i][j-_scale] !=-1 && indexMap [i-_scale][j-_scale]!=-1 ) {
-            tempVec3d << indexMap[i][j], indexMap[i][j-_scale],indexMap [i-_scale][j-_scale]  ;
-            tvi.push_back(tempVec3d);
-            
+            std::array<int, 3> tempArray = {  indexMap[i][j], indexMap[i][j-_scale],indexMap [i-_scale][j-_scale]  };
+            reconstructedMesh.tvi.push_back(tempArray);
+            reconstructedMesh.neibour.at(indexMap [i-_scale][j-_scale] )(0) = indexMap[i][j-_scale];
             }
 
             if ( indexMap[i-_scale][j-_scale] !=-1 && indexMap [i-_scale][j]!=-1 ) {
-            tempVec3d <<   indexMap [i-_scale][j],indexMap[i][j], indexMap[i-_scale][j-_scale];
-            tvi.push_back(tempVec3d);
+             std::array<int, 3> tempArray = {   indexMap [i-_scale][j],indexMap[i][j], indexMap[i-_scale][j-_scale]};
+            reconstructedMesh.tvi.push_back(tempArray);
+            reconstructedMesh.neibour.at(indexMap [i-_scale][j-_scale] )(1) = indexMap [i-_scale][j];
            
             }
 
@@ -965,30 +968,71 @@ int main(int argc, char* argv[])
   
     freopen ("depthmap.off","w",stdout);
     cout << "COFF\n";
-    cout << (count) << " " << tvi.size() << " 0" << endl;
+    cout << (reconstructedMesh.vertices.size()) << " " << reconstructedMesh.tvi.size() << " 0" << endl;
 
-    for (int i =0; i < imgw; i+=_scale) {
-        for (int  j =0 ; j < imgh; j+=_scale){
-        if ( depthMap[i][j]!=-9999  )
-        {       
+    for (int k =0; k < reconstructedMesh.vertices.size(); k++) {
+                int i = reconstructedMesh.vertices.at(k)(0);
+                int j = reconstructedMesh.vertices.at(k)(1); 
+                float z = reconstructedMesh.vertices.at(k)(2);      
                 b=image.at<cv::Vec3b>(j,i)[0];//R
                 g=image.at<cv::Vec3b>(j,i)[1];//B
                 r=image.at<cv::Vec3b>(j,i)[2];//G
                 tempVec3f << i ,j, depthMap[i][j];
                 tempVec3f << (int)r , (int)g, (int)b;
-                cout << (i) <<" " << (j) << " " << (depthMap[i][j]) <<  " "  << (int) r << " "  << (int) g << " " << (int) b << " 1"   <<endl ;
+                cout << (i) <<" " << (j) << " " << (z) <<  " "  << (int) r << " "  << (int) g << " " << (int) b << " 1"   <<endl ;
              
-        }
-        } // 2nd for    
-    } //1st for
+    }
 
-    for (int i =0; i< tvi.size(); i++) {
-        cout << 3 << " " << tvi.at(i).transpose() << endl;
+    for (int i =0; i< reconstructedMesh.tvi.size(); i++) {
+        cout << 3 << " " << reconstructedMesh.tvi.at(i)[0] << " " << reconstructedMesh.tvi.at(i)[1]    << " " << reconstructedMesh.tvi.at(i)[2] << endl;
+    }
+    count = 0;
+    for (int i =0; i< reconstructedMesh.neibour.size(); i++) {
+        if (reconstructedMesh.neibour.at(i)(0) !=-1 && reconstructedMesh.neibour.at(i)(1) !=-1  ) {
+            int id1 =i; int id2 =reconstructedMesh.neibour.at(i)(0); int id3= reconstructedMesh.neibour.at(i)(1);
+            Vector3f u = reconstructedMesh.vertices.at(id2) -  reconstructedMesh.vertices.at(id1);
+            Vector3f v = reconstructedMesh.vertices.at(id3) -  reconstructedMesh.vertices.at(id1);
+            cout << ((u.cross(v).transpose())/u.cross(v).norm()) << " " << ((u.cross(v).transpose())/u.cross(v).norm()).norm ()<< endl;
+            count ++;
+        }
     }
 
     cout << count << endl;
-     cout << tvi.size() << endl;
-       
+    cout << reconstructedMesh.tvi.size() << endl;
+    cout <<   reconstructedMesh.neibour.size() << endl;
+        
+    // write parameter out
+    // I, l0,l1,l2,l3,z1,z2,z3,id1,id2,id3,D
+    freopen ("parameter.txt","w",stdout);
+    double l0,l1,l2,l3;
+    getConstanceL(l0,l1,l2,l3);
+    cout << reconstructedMesh.vertices.size()  << endl;
+    cout << _scale << endl;
+    for (int k =0; k <reconstructedMesh.vertices.size(); k++ ) {
+        int id1 =k; int id2 =reconstructedMesh.neibour.at(k)(0); int id3= reconstructedMesh.neibour.at(k)(1);
+        if (id2!=-1 && id3!=-1) {
+        int i = reconstructedMesh.vertices.at(k)(0);
+        int j = reconstructedMesh.vertices.at(k)(1); 
+           
+        b=image.at<cv::Vec3b>(j,i)[0];//R
+        g=image.at<cv::Vec3b>(j,i)[1];//B
+        r=image.at<cv::Vec3b>(j,i)[2];//G
+
+        float I  = getIntensity(r,g,b);
+        float z1 = reconstructedMesh.vertices.at(id1)(2);   
+        float z2 =  reconstructedMesh.vertices.at(id2)(2);   
+        float z3 =  reconstructedMesh.vertices.at(id3)(2); 
+        Vector3f u = reconstructedMesh.vertices.at(id2) -  reconstructedMesh.vertices.at(id1);
+        Vector3f v = reconstructedMesh.vertices.at(id3) -  reconstructedMesh.vertices.at(id1);
+        float D = (u.cross(v)).norm();
+
+        cout << I <<" " << z1 <<" " << z2 <<" " << z3 <<" " << id1  <<" "  << id2  <<" " << id3 <<" "  << D << endl;  
+        }
+        else
+        cout << -99999 << endl;
+    }
+
+
    // return 0;
    
     fs::path outputfile = outputbasename + ".png";

@@ -61,7 +61,6 @@ struct Mesh
     std::vector<float> eigeinValue; // eigeinValue of normal vector of vertex
     vector <vector <int> > edge;
     vector <Eigen::Vector2d> neibour;
-    std::vector<Eigen::Vector3f> l; // normal vector of vertex 
     std::vector<float> D;
 
 };

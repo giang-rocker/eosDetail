@@ -1031,6 +1031,10 @@ int main(int argc, char* argv[])
     }
 
 
+    freopen ("depth.txt","w",stdout);
+    for (int i =0; i < reconstructedMesh.vertices.size(); i++) {
+        cout << reconstructedMesh.vertices.at(i)(2) << endl;
+    }
    // return 0;
    
     fs::path outputfile = outputbasename + ".png";

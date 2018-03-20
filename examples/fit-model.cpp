@@ -1006,8 +1006,6 @@ int main(int argc, char* argv[])
     freopen ("parameter.txt","w",stdout);
     double l0,l1,l2,l3;
     getConstanceL(l0,l1,l2,l3);
-    cout << reconstructedMesh.vertices.size()  << endl;
-    cout << _scale << endl;
     for (int k =0; k <reconstructedMesh.vertices.size(); k++ ) {
         int id1 =k; int id2 =reconstructedMesh.neibour.at(k)(0); int id3= reconstructedMesh.neibour.at(k)(1);
         if (id2!=-1 && id3!=-1) {
@@ -1028,8 +1026,8 @@ int main(int argc, char* argv[])
 
         cout << I <<" " << z1 <<" " << z2 <<" " << z3 <<" " << id1  <<" "  << id2  <<" " << id3 <<" "  << D << endl;  
         }
-        else
-        cout << -99999 << endl;
+     //   else
+     //   cout << -99999 << endl;
     }
 
 

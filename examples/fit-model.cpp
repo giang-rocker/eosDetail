@@ -924,7 +924,7 @@ int main(int argc, char* argv[])
      
     // get depth & get mapping 3D to 2D
     render::add_depth_information( mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
-                           fitting::get_opencv_viewport(image.cols, image.rows),depthMap,textCoor,  8.0f );//2* (int) scale);
+                           fitting::get_opencv_viewport(image.cols, image.rows),depthMap,textCoor,  17.0f );//2* (int) scale);
     // get mapping 2D to 3D index
     render::getMapping2D3DBy2D(outimg,mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
                            fitting::get_opencv_viewport(image.cols, image.rows), mapping2D3D,currentLen );
@@ -933,7 +933,7 @@ int main(int argc, char* argv[])
     
    
     int _index = 0 ;
-     int _scale  = 10;
+     int _scale  = 13;
 
     // CREATE INDEX
     for (int i =_scale; i < imgw; i+=_scale) {

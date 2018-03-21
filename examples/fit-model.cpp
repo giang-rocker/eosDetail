@@ -831,7 +831,7 @@ int main(int argc, char* argv[])
     const int imgw = image.cols;
     const int imgh = image.rows;
     uint8_t r,g,b;  
-   
+   /*
 
     cout <<"image size: " << image.cols << " x " << image.rows <<endl; 
 
@@ -867,7 +867,7 @@ int main(int argc, char* argv[])
 
     float scale = getLen(A,B) / getLen(C,D);
     cout << "scale: " << scale << endl;
-    
+    */
     /*
     // WRITE 2D IMAGE & IMAGE PLAN
     freopen ("_2DimageRealZ.off","w",stdout);
@@ -933,7 +933,7 @@ int main(int argc, char* argv[])
     
    
     int _index = 0 ;
-     int _scale  = 15;
+     int _scale  = 17;
 
     // CREATE INDEX
     for (int i =_scale; i < imgw; i+=_scale) {

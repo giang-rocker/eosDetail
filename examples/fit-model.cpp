@@ -933,7 +933,7 @@ int main(int argc, char* argv[])
     
    
     int _index = 0 ;
-     int _scale  = 15;
+     int _scale  = 19;
 
     // CREATE INDEX
     for (int i =_scale; i < imgw; i+=_scale) {

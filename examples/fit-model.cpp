@@ -988,19 +988,11 @@ int main(int argc, char* argv[])
     }
     count = 0;
     for (int i =0; i< reconstructedMesh.neibour.size(); i++) {
-        if (reconstructedMesh.neibour.at(i)(0) !=-1 && reconstructedMesh.neibour.at(i)(1) !=-1  ) {
-            int id1 =i; int id2 =reconstructedMesh.neibour.at(i)(0); int id3= reconstructedMesh.neibour.at(i)(1);
-            Vector3f u = reconstructedMesh.vertices.at(id2) -  reconstructedMesh.vertices.at(id1);
-            Vector3f v = reconstructedMesh.vertices.at(id3) -  reconstructedMesh.vertices.at(id1);
-            cout << ((u.cross(v).transpose())/u.cross(v).norm()) << " " << ((u.cross(v).transpose())/u.cross(v).norm()).norm ()<< endl;
-            count ++;
+         int id1 =i; int id2 =reconstructedMesh.neibour.at(i)(0); int id3= reconstructedMesh.neibour.at(i)(1);
+           cout  << id2 <<" " << id3 << endl;
         }
-    }
-
-    cout << count << endl;
-    cout << reconstructedMesh.tvi.size() << endl;
-    cout <<   reconstructedMesh.neibour.size() << endl;
-        
+  
+         
     // write parameter out
     // I, l0,l1,l2,l3,z1,z2,z3,id1,id2,id3,D
     freopen ("parameter.txt","w",stdout);

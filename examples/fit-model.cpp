@@ -928,13 +928,23 @@ int main(int argc, char* argv[])
        
     
     int _index = 0 ;
-    int _scale  = 17;
+    int _scale  = 15;
 
     //generate data
-    depthMap[1003][578]=506.7f; 
-    depthMap[1360][1224+_scale]=(depthMap[1360][1224] + depthMap[1360][1224+2*_scale])/2;
-    depthMap[2091][1037+_scale]=(depthMap[2091][1037] + depthMap[2091][1037+2*_scale])/2;
-    
+    int kx = 1605, ky = 180;
+    depthMap[kx][ky+_scale]=(depthMap[kx][ky] + depthMap[kx][ky+2*_scale])/2;
+    kx = 1620, ky = 330;
+    depthMap[kx][ky+_scale]=(depthMap[kx][ky] + depthMap[kx][ky+2*_scale])/2;
+    kx = 1605, ky = 780;
+    depthMap[kx][ky+_scale]=(depthMap[kx][ky] + depthMap[kx][ky+2*_scale])/2;
+    kx = 2085, ky = 1050;
+    depthMap[kx][ky+_scale]=(depthMap[kx][ky] + depthMap[kx][ky+2*_scale])/2;
+    kx = 1860, ky = 1545;
+    depthMap[kx][ky+_scale]=(depthMap[kx][ky] + depthMap[kx][ky+2*_scale])/2;
+    kx = 1365, ky = 1305;
+    depthMap[kx][ky+_scale]=(depthMap[kx][ky] + depthMap[kx][ky+2*_scale])/2;
+    kx = 755, ky = 1290;
+    depthMap[kx][ky+_scale]=(depthMap[kx][ky] + depthMap[kx][ky+2*_scale])/2;
 
     // CREATE INDEX
     for (int i =_scale; i < imgw; i+=_scale) {

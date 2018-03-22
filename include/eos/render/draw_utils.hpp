@@ -62,9 +62,24 @@ float area(Vector2f A, Vector2f B, Vector2f M) {
 }
 
 bool insideABC(Vector2f A, Vector2f B, Vector2f C, Vector2f M) {
-    return (!(ceilf(area(A, B, M) + area(A, C, M) + area(B, C, M)) != ceilf(area(A, B, C))));
+    return ((ceilf(area(A, B, M) + area(A, C, M) + area(B, C, M)) != ceilf(area(A, B, C))));
 }
 
+float sign (Vector2f v1, Vector2f v2, Vector2f v3)
+{
+    return (v1(0) - v3(0)) * (v2(1) - v3(1)) - (v2(0) - v3(0)) * (v1(1) - v3(1));
+}
+
+bool insideABCX (Vector2f pt, Vector2f v1, Vector2f v2, Vector2f v3)
+{
+    bool b1, b2, b3;
+
+    b1 = (sign(pt, v1, v2)) < 0.0f;
+    b2 = (sign(pt, v2, v3)) < 0.0f;
+    b3 = (sign(pt, v3, v1)) < 0.0f;
+
+    return ((b1 == b2) && (b2 == b3));
+}
 
 inline void draw_wireframe(cv::Mat image, const core::Mesh mesh, glm::mat4x4 modelview,
                            glm::mat4x4 projection, glm::vec4 viewport,
@@ -141,9 +156,9 @@ inline void add_depth_information(const core::Mesh mesh, glm::mat4x4 modelview,
          
             float p1z = p1.z * scale; float p2z = p2.z * scale;float p3z = p3.z* scale;
          
-      //      depthMap[(int)p1.x][(int)p1.y] =  p1z ;
-       //     depthMap[(int)p2.x][(int)p2.y] =  p2z ;
-        //    depthMap[(int)p3.x][(int)p3.y] =  p3z ;
+            depthMap[(int)p1.x][(int)p1.y] =  p1z ;
+            depthMap[(int)p2.x][(int)p2.y] =  p2z ;
+            depthMap[(int)p3.x][(int)p3.y] =  p3z ;
 
             textCoor.at(triangle[0])(0) = (int)p1.x;textCoor.at(triangle[0])(1) = (int)p1.y;
             textCoor.at(triangle[1])(0) = (int)p2.x;textCoor.at(triangle[1])(1) = (int)p2.y;
@@ -173,8 +188,11 @@ inline void add_depth_information(const core::Mesh mesh, glm::mat4x4 modelview,
             for (int i = minX; i <=  maxX; i+=1)
                 for (int j =minY; j <= maxY; j+=1) {
                     M << i , j;
-                    if (insideABC(A1,B1,C1,M))
+                    if (!insideABC(A1,B1,C1,M)) {
                     depthMap[i ][j ] =   -(d+a*(i ) + b*(j ))/c ;
+                    if (fabs(depthMap[i ][j ]) > 650) depthMap[i ][j ] = -9999;
+                    }
+
             }
 
         }

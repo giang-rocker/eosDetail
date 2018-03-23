@@ -773,6 +773,18 @@ int main(int argc, char* argv[])
     render::draw_wireframe(outimg, mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
                          fitting::get_opencv_viewport(image.cols, image.rows));
     
+    fs::path outputfile = outputbasename + ".png";
+    cv::imwrite(outputfile.string(), outimg);
+    cv::imwrite("imageMarked.jpg", image);
+
+    // Save the mesh as textured obj:
+    outputfile.replace_extension(".obj");
+    core::write_textured_obj(mesh, outputfile.string());
+
+    // And save the isomap:
+    outputfile.replace_extension(".isomap.png");
+    cv::imwrite(outputfile.string(), core::to_mat(isomap));
+
       cout <<"Matrix 3x4" << endl;
     cout << affine_from_ortho << endl;
    
@@ -1040,17 +1052,7 @@ int main(int argc, char* argv[])
     }
    // return 0;
    
-    fs::path outputfile = outputbasename + ".png";
-    cv::imwrite(outputfile.string(), outimg);
-    cv::imwrite("imageMarked.jpg", image);
-
-    // Save the mesh as textured obj:
-    outputfile.replace_extension(".obj");
-    core::write_textured_obj(mesh, outputfile.string());
-
-    // And save the isomap:
-    outputfile.replace_extension(".isomap.png");
-    cv::imwrite(outputfile.string(), core::to_mat(isomap));
+   
    
 
  //   cout << "Finished fitting and wrote result mesh and isomap to files with basename "

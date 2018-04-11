@@ -662,7 +662,7 @@ int main(int argc, char* argv[])
         // clang-format off
         desc.add_options()
             ("help,h", "display the help message")
-            ("model,m", po::value<string>(&modelfile)->required()->default_value("share/sfm_shape_3448.bin"),
+            ("model,m", po::value<string>(&modelfile)->required()->default_value("share/sfm_shape_29587.bin"),
                 "a Morphable Model stored as cereal BinaryArchive")
             ("image,i", po::value<string>(&imagefile)->required()->default_value("data/image_0010.png"),
                 "an input image")
@@ -672,9 +672,9 @@ int main(int argc, char* argv[])
                 "landmark identifier to model vertex number mapping")
             ("model-contour,c", po::value<string>(&contourfile)->required()->default_value("share/sfm_model_contours.json"),
                 "file with model contour indices")
-            ("edge-topology,e", po::value<string>(&edgetopologyfile)->required()->default_value("share/sfm_3448_edge_topology.json"),
+            ("edge-topology,e", po::value<string>(&edgetopologyfile)->required()->default_value("share/sfm_29587_edge_topology.json"),
                 "file with model's precomputed edge topology")
-            ("blendshapes,b", po::value<string>(&blendshapesfile)->required()->default_value("share/expression_blendshapes_3448.bin"),
+            ("blendshapes,b", po::value<string>(&blendshapesfile)->required()->default_value("share/expression_blendshapes_29587.bin"),
                 "file with blendshapes")
             ("output,o", po::value<string>(&outputbasename)->required()->default_value("out"),
                 "basename for the output rendering and obj files");
@@ -787,7 +787,13 @@ int main(int argc, char* argv[])
 
       cout <<"Matrix 3x4" << endl;
     cout << affine_from_ortho << endl;
+    // global declare
+    const int imgw = image.cols;
+    const int imgh = image.rows;
+    uint8_t r,g,b;
+
    
+
     /*
     cout << "XXX" << endl;
       int delta = 5;
@@ -840,9 +846,7 @@ int main(int argc, char* argv[])
     
 
 
-    const int imgw = image.cols;
-    const int imgh = image.rows;
-    uint8_t r,g,b;  
+     
    /*
 
     cout <<"image size: " << image.cols << " x " << image.rows <<endl; 
@@ -936,9 +940,44 @@ int main(int argc, char* argv[])
      
     // get depth & get mapping 3D to 2D
     render::add_depth_information( mesh, rendering_params.get_modelview(), rendering_params.get_projection(),
-                           fitting::get_opencv_viewport(image.cols, image.rows),depthMap,textCoor,  17.0f );//2* (int) scale);
-       
+                           fitting::get_opencv_viewport(image.cols, image.rows),depthMap,textCoor,  20.0f );//2* (int) scale);
+    getEdgeFromMesh(mesh);
     
+    /*
+    11/04/2018
+    work direcyly from the fitted template
+    */
+    
+    freopen ("fittedTemplateColor.off","w",stdout);
+    cout << "COFF" << endl;
+    cout << mesh.vertices.size () << " " << mesh.tvi.size () <<" 0" << endl;
+
+    for (int i =0 ; i < mesh.vertices.size () ; i ++) {
+        int x = textCoor.at(i)(0);
+        int y = textCoor.at(i)(1); 
+        b=image.at<cv::Vec3b>(y,x)[0];//R
+        g=image.at<cv::Vec3b>(y,x)[1];//B
+        r=image.at<cv::Vec3b>(y,x)[2];//G
+        if (mesh.vertices.at (i)(2)>-70)
+        cout << mesh.vertices.at (i)(0) << " "<< mesh.vertices.at (i)(1) << " "<< mesh.vertices.at (i)(2) << " ";
+        else cout << "0 0 -80 " ;
+        cout << (int)r << " " << (int)g <<  " " << (int) b << " 1" << endl;
+    }
+
+    for (int i =0; i < mesh.tvi.size (); i++) {
+        cout << "3 " << mesh.tvi[i][0] << " " << mesh.tvi[i][1] << " " << mesh.tvi[i][2] << endl;
+    }
+
+    for (int i =0 ; i< mesh.vertices.size(); i++ ) {
+        if ( mesh.edge.at(i).size () > 2 &&  (mesh.vertices.at (i)(2)>-70) )
+            cout << mesh.edge.at(i)[0] <<" " << mesh.edge.at(i)[1] << endl;
+        else 
+            cout << "-1 -1\n";
+    }
+
+    // END OF CODE 11/04/2018
+    return 0;
+
     int _index = 0 ;
     int _scale  = 15;
 
@@ -1006,6 +1045,7 @@ int main(int argc, char* argv[])
              
     }
 
+
     for (int i =0; i< reconstructedMesh.tvi.size(); i++) {
         cout << 3 << " " << reconstructedMesh.tvi.at(i)[0] << " " << reconstructedMesh.tvi.at(i)[1]    << " " << reconstructedMesh.tvi.at(i)[2] << endl;
     }
@@ -1014,47 +1054,10 @@ int main(int argc, char* argv[])
          int id1 =i; int id2 =reconstructedMesh.neibour.at(i)(0); int id3= reconstructedMesh.neibour.at(i)(1);
            cout  << id2 <<" " << id3 << endl;
         }
-  
-         
+           
     // write parameter out
     // I, l0,l1,l2,l3,z1,z2,z3,id1,id2,id3,D
-    freopen ("parameter.txt","w",stdout);
-    double l0,l1,l2,l3;
-    getConstanceL(l0,l1,l2,l3);
-    for (int k =0; k <reconstructedMesh.vertices.size(); k++ ) {
-        int id1 =k; int id2 =reconstructedMesh.neibour.at(k)(0); int id3= reconstructedMesh.neibour.at(k)(1);
-        if (id2!=-1 && id3!=-1) {
-        int i = reconstructedMesh.vertices.at(k)(0);
-        int j = reconstructedMesh.vertices.at(k)(1); 
-           
-        b=image.at<cv::Vec3b>(j,i)[0];//R
-        g=image.at<cv::Vec3b>(j,i)[1];//B
-        r=image.at<cv::Vec3b>(j,i)[2];//G
-
-        float I  = getIntensity(r,g,b);
-        float z1 = reconstructedMesh.vertices.at(id1)(2);   
-        float z2 =  reconstructedMesh.vertices.at(id2)(2);   
-        float z3 =  reconstructedMesh.vertices.at(id3)(2); 
-        Vector3f u = reconstructedMesh.vertices.at(id2) -  reconstructedMesh.vertices.at(id1);
-        Vector3f v = reconstructedMesh.vertices.at(id3) -  reconstructedMesh.vertices.at(id1);
-        float D = (u.cross(v)).norm();
-
-        cout << I <<" " << z1 <<" " << z2 <<" " << z3 <<" " << id1  <<" "  << id2  <<" " << id3 <<" "  << D << endl;  
-        }
-     //   else
-     //   cout << -99999 << endl;
-    }
-
-
-    freopen ("depth.txt","w",stdout);
-    for (int i =0; i < reconstructedMesh.vertices.size(); i++) {
-        cout << reconstructedMesh.vertices.at(i)(2) << endl;
-    }
-   // return 0;
-   
-   
-   
-
+ 
  //   cout << "Finished fitting and wrote result mesh and isomap to files with basename "
   //  cout<< outputfile.stem().stem() << "." << endl;
   

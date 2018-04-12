@@ -662,7 +662,7 @@ int main(int argc, char* argv[])
         // clang-format off
         desc.add_options()
             ("help,h", "display the help message")
-            ("model,m", po::value<string>(&modelfile)->required()->default_value("share/sfm_shape_3448.bin"),
+            ("model,m", po::value<string>(&modelfile)->required()->default_value("share/sfm_shape_29587.bin"),
                 "a Morphable Model stored as cereal BinaryArchive")
             ("image,i", po::value<string>(&imagefile)->required()->default_value("data/image_0010.png"),
                 "an input image")
@@ -672,9 +672,9 @@ int main(int argc, char* argv[])
                 "landmark identifier to model vertex number mapping")
             ("model-contour,c", po::value<string>(&contourfile)->required()->default_value("share/sfm_model_contours.json"),
                 "file with model contour indices")
-            ("edge-topology,e", po::value<string>(&edgetopologyfile)->required()->default_value("share/sfm_3448_edge_topology.json"),
+            ("edge-topology,e", po::value<string>(&edgetopologyfile)->required()->default_value("share/sfm_29587_edge_topology.json"),
                 "file with model's precomputed edge topology")
-            ("blendshapes,b", po::value<string>(&blendshapesfile)->required()->default_value("share/expression_blendshapes_3448.bin"),
+            ("blendshapes,b", po::value<string>(&blendshapesfile)->required()->default_value("share/expression_blendshapes_29587.bin"),
                 "file with blendshapes")
             ("output,o", po::value<string>(&outputbasename)->required()->default_value("out"),
                 "basename for the output rendering and obj files");
@@ -947,6 +947,7 @@ int main(int argc, char* argv[])
     11/04/2018
     work direcyly from the fitted template
     */
+    int border = -30;
     
     freopen ("fittedTemplateColor.off","w",stdout);
     cout << "COFF" << endl;
@@ -958,9 +959,9 @@ int main(int argc, char* argv[])
         b=image.at<cv::Vec3b>(y,x)[0];//R
         g=image.at<cv::Vec3b>(y,x)[1];//B
         r=image.at<cv::Vec3b>(y,x)[2];//G
-       // if (mesh.vertices.at (i)(2)>-70)
+        if (mesh.vertices.at (i)(2)>border)
         cout << mesh.vertices.at (i)(0) << " "<< mesh.vertices.at (i)(1) << " "<< mesh.vertices.at (i)(2) << " ";
-       // else cout << "0 0 -80 " ;
+        else cout << "0 0 -80 " ;
         cout << (int)r << " " << (int)g <<  " " << (int) b << " 1" << endl;
     }
 
@@ -969,7 +970,7 @@ int main(int argc, char* argv[])
     }
 
     for (int i =0 ; i< mesh.vertices.size(); i++ ) {
-        if ( mesh.edge.at(i).size () > 2 &&  (mesh.vertices.at (i)(2)>-70) )
+        if ( mesh.edge.at(i).size () > 2 &&  (mesh.vertices.at (i)(2)>border) )
             cout << mesh.edge.at(i)[0] <<" " << mesh.edge.at(i)[1] << endl;
         else 
             cout << "-1 -1\n";

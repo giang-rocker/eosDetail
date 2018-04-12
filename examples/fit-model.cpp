@@ -958,9 +958,9 @@ int main(int argc, char* argv[])
         b=image.at<cv::Vec3b>(y,x)[0];//R
         g=image.at<cv::Vec3b>(y,x)[1];//B
         r=image.at<cv::Vec3b>(y,x)[2];//G
-        if (mesh.vertices.at (i)(2)>-70)
+       // if (mesh.vertices.at (i)(2)>-70)
         cout << mesh.vertices.at (i)(0) << " "<< mesh.vertices.at (i)(1) << " "<< mesh.vertices.at (i)(2) << " ";
-        else cout << "0 0 -80 " ;
+       // else cout << "0 0 -80 " ;
         cout << (int)r << " " << (int)g <<  " " << (int) b << " 1" << endl;
     }
 

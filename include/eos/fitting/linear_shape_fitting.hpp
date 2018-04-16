@@ -149,7 +149,7 @@ inline std::vector<float> fit_shape_to_landmarks_linear(
     const MatrixXf rhs = -A.transpose() * Omega.asDiagonal() * b; // It's -A^t*Omega^t*b, but we don't need to
                                                                   // transpose Omega, since it's a diagonal
     
-    
+    cout << A.cols() << " " << A.rows() << endl;
     cout << "XXX" << endl;
     freopen ("MatrixA.txt","w",stdout);
 

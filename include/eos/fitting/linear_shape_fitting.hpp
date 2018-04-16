@@ -164,6 +164,9 @@ inline std::vector<float> fit_shape_to_landmarks_linear(
     // multiplied with their eigenvalues.
     const VectorXf c_s = AtOmegaAReg.colPivHouseholderQr().solve(rhs);
 
+    freopen ("MatrixX.txt","w",stdout);
+    cout << c_s << endl;
+
     return std::vector<float>(c_s.data(), c_s.data() + c_s.size());
 };
 

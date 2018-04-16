@@ -154,6 +154,8 @@ inline std::vector<float> fit_shape_to_landmarks_linear(
     freopen ("MatrixA.txt","w",stdout);
 
     cout << A << endl << endl;;
+     freopen ("MatrixB.txt","w",stdout);
+
     cout << b << endl;                                                             // matrix, and Omega^t = Omega.
 
     // c_s: The 'x' that we solve for. (The variance-normalised shape parameter vector, $c_s =

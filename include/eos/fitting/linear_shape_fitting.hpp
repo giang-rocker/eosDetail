@@ -32,6 +32,10 @@
 #include <cassert>
 #include <optional>
 
+#include <iostream>
+
+using namespace std;
+
 namespace eos {
 namespace fitting {
 
@@ -144,7 +148,13 @@ inline std::vector<float> fit_shape_to_landmarks_linear(
                                  lambda * Eigen::MatrixXf::Identity(num_coeffs_to_fit, num_coeffs_to_fit);
     const MatrixXf rhs = -A.transpose() * Omega.asDiagonal() * b; // It's -A^t*Omega^t*b, but we don't need to
                                                                   // transpose Omega, since it's a diagonal
-                                                                  // matrix, and Omega^t = Omega.
+    
+    
+    cout << "XXX" << endl;
+    freopen ("MatrixA.txt","w",stdout);
+
+    cout << A << endl << endl;;
+    cout << b << endl;                                                             // matrix, and Omega^t = Omega.
 
     // c_s: The 'x' that we solve for. (The variance-normalised shape parameter vector, $c_s =
     // [a_1/sigma_{s,1} , ..., a_m-1/sigma_{s,m-1}]^t$.)
@@ -292,6 +302,7 @@ fit_shape_to_landmarks_linear_multi(const morphablemodel::PcaModel& shape_model,
     const MatrixXf AtOmegaAReg = A.transpose() * Omega.asDiagonal() * A +
                                  lambda * Eigen::MatrixXf::Identity(num_coeffs_to_fit, num_coeffs_to_fit);
     const MatrixXf rhs = -A.transpose() * Omega.asDiagonal() * b; // It's -A^t*Omega^t*b, but we don't need to transpose Omega, since it's a diagonal matrix, and Omega^t = Omega.
+
 
     // c_s: The 'x' that we solve for. (The variance-normalised shape parameter vector, $c_s = [a_1/sigma_{s,1} , ..., a_m-1/sigma_{s,m-1}]^t$.)
     // We get coefficients ~ N(0, 1), because we're fitting with the rescaled basis. The coefficients are not multiplied with their eigenvalues.

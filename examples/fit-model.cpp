@@ -948,33 +948,43 @@ int main(int argc, char* argv[])
     work direcyly from the fitted template
     */
     int border = -55;
+    vector <int> mappIndex ; 
     
     freopen ("fittedTemplateColor.off","w",stdout);
     cout << "COFF" << endl;
     cout << mesh.vertices.size () << " " << mesh.tvi.size () <<" 0" << endl;
-
+    int currentIndex = 0;
     for (int i =0 ; i < mesh.vertices.size () ; i ++) {
+        mappIndex.push_back(-1);
         int x = textCoor.at(i)(0);
         int y = textCoor.at(i)(1); 
         b=image.at<cv::Vec3b>(y,x)[0];//R
         g=image.at<cv::Vec3b>(y,x)[1];//B
         r=image.at<cv::Vec3b>(y,x)[2];//G
-        if (mesh.vertices.at (i)(2)>border)
+        if (mesh.vertices.at (i)(2)>border) {
         cout << mesh.vertices.at (i)(0) << " "<< mesh.vertices.at (i)(1) << " "<< mesh.vertices.at (i)(2) << " ";
-        else cout << "0 0 -80 " ;
+        mappIndex.at(i) = currentIndex++;
         cout << (int)r << " " << (int)g <<  " " << (int) b << " 1" << endl;
+        }
+        //else cout << "0 0 -80 " ;
     }
-
+    int countEdge = 0;
     for (int i =0; i < mesh.tvi.size (); i++) {
-        cout << "3 " << mesh.tvi[i][0] << " " << mesh.tvi[i][1] << " " << mesh.tvi[i][2] << endl;
+        if (mappIndex.at(mesh.tvi[i][0]) !=-1 && mappIndex.at(mesh.tvi[i][1])!=-1 && mappIndex.at(mesh.tvi[i][2])!=-1) {
+            cout << "3 " << mappIndex.at(mesh.tvi[i][0]) << " " << mappIndex.at(mesh.tvi[i][1]) << " " << mappIndex.at(mesh.tvi[i][2]) << endl;
+            countEdge++;
+        }
     }
 
-    for (int i =0 ; i< mesh.vertices.size(); i++ ) {
+    for (int i =0 ; i< currentIndex; i++ ) {
         if ( mesh.edge.at(i).size () > 2 &&  (mesh.vertices.at (i)(2)>border) )
-            cout << mesh.edge.at(i)[0] <<" " << mesh.edge.at(i)[1] << endl;
-        else 
-            cout << "-1 -1\n";
+            cout << mappIndex.at(mesh.edge.at(i)[0]) <<" " << mappIndex.at(mesh.edge.at(i)[1]) << endl;
+        //else 
+       //cout << "-1 -1\n";
     }
+
+    cout << currentIndex<< endl;
+    cout << countEdge << endl;
 
     // END OF CODE 11/04/2018
     return 0;

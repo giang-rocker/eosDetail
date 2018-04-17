@@ -150,24 +150,14 @@ inline std::vector<float> fit_shape_to_landmarks_linear(
                                                                   // transpose Omega, since it's a diagonal
     
     cout << A.cols() << " " << A.rows() << endl;
-    cout << "XXX" << endl;
-    freopen ("MatrixA.txt","w",stdout);
-
-    cout << A << endl << endl;;
-     freopen ("MatrixB.txt","w",stdout);
-
-    cout << b << endl;                                                             // matrix, and Omega^t = Omega.
-
+    
     // c_s: The 'x' that we solve for. (The variance-normalised shape parameter vector, $c_s =
     // [a_1/sigma_{s,1} , ..., a_m-1/sigma_{s,m-1}]^t$.)
     // We get coefficients ~ N(0, 1), because we're fitting with the rescaled basis. The coefficients are not
     // multiplied with their eigenvalues.
     const VectorXf c_s = AtOmegaAReg.colPivHouseholderQr().solve(rhs);
 
-    freopen ("MatrixX.txt","w",stdout);
-    cout << c_s << endl;
-
-    return std::vector<float>(c_s.data(), c_s.data() + c_s.size());
+     return std::vector<float>(c_s.data(), c_s.data() + c_s.size());
 };
 
 /**

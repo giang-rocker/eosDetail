@@ -947,7 +947,7 @@ int main(int argc, char* argv[])
     11/04/2018
     work direcyly from the fitted template
     */
-    int border = -55;
+    int border = -45;
     vector <int> mappIndex ; 
     
     freopen ("fittedTemplateColor.off","w",stdout);
